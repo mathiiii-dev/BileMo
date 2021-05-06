@@ -88,7 +88,7 @@ class GithubAuthenticator extends SocialAuthenticator
         return null;
     }
 
-    private function getClient (): OAuth2ClientInterface
+    private function getClient(): OAuth2ClientInterface
     {
         return $this->clientRegistry->getClient('github');
     }

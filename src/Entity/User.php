@@ -44,6 +44,12 @@ class User implements UserInterface
      */
     private ?string $github_id;
 
+    /**
+     * @ORM\Column(type="string", unique=true, nullable=true)
+     */
+     private $apiToken;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -141,6 +147,24 @@ class User implements UserInterface
     {
         $this->github_id = $github_id;
 
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getApiToken()
+    {
+        return $this->apiToken;
+    }
+
+    /**
+     * @param mixed $apiToken
+     * @return User
+     */
+    public function setApiToken($apiToken)
+    {
+        $this->apiToken = $apiToken;
         return $this;
     }
 }
