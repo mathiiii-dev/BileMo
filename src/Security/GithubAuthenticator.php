@@ -45,7 +45,6 @@ class GithubAuthenticator extends SocialAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /** @var GithubResourceOwner $githubUser */
         $githubUser = $this->getClient()->fetchUserFromToken($credentials);
 
         // On récupère l'email de l'utilisateur (spécifique à github)
@@ -71,7 +70,7 @@ class GithubAuthenticator extends SocialAuthenticator
             throw new NotVerifiedEmailException();
         }
 
-        return $this->userRepository->findOrCreateFromGithubOauth($githubUser);
+        return $this->userRepository->findOrCreateFromGithubOauth($githubUser, $credentials);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response

@@ -38,7 +38,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->_em->flush();
     }
 
-    public function findOrCreateFromGithubOauth(GithubResourceOwner $owner) {
+    public function findOrCreateFromGithubOauth(GithubResourceOwner $owner, $credentials) {
 
         /**
          * @var User|null $user
@@ -55,6 +55,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if ($user) {
             if($user->getGithubId() === null) {
                 $user->setGithubId($owner->getId());
+                $user->setApiToken($credentials);
                 $this->getEntityManager()->flush();
             }
             return $user;
@@ -62,7 +63,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $user = (new User())
             ->setGithubId($owner->getId())
             ->setEmail($owner->getEmail())
-            ->setUsername($owner->getNickname());
+            ->setUsername($owner->getNickname())
+            ->setApiToken($credentials);
 
         $em = $this->getEntityManager();
         $em->persist($user);

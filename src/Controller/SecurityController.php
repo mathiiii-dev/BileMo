@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Serializer\Serializer;
@@ -25,18 +27,24 @@ class SecurityController extends AbstractController
     private Serializer $serializer;
     private UserPasswordEncoderInterface $passwordEncoder;
     private EntityManagerInterface $entityManager;
+    /**
+     * @var \App\Repository\UserRepository
+     */
+    private UserRepository $userRepository;
 
     public function __construct(
         ClientRegistry $clientRegistry,
         SerializerInterface $serializer,
         UserPasswordEncoderInterface $passwordEncoder,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        UserRepository $userRepository
     )
     {
         $this->clientRegistry = $clientRegistry;
         $this->serializer = $serializer;
         $this->passwordEncoder = $passwordEncoder;
         $this->entityManager = $entityManager;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -46,7 +54,7 @@ class SecurityController extends AbstractController
     {
         /** @var GithubClient $client */
         $client = $this->clientRegistry->getClient($service);
-        return $client->redirect(['read:user', 'user:email']);
+        return $client->redirect(['read:email', 'read:username']);
     }
 
     /**
@@ -54,16 +62,17 @@ class SecurityController extends AbstractController
      */
     public function accessToken(Request $request, string $service): JsonResponse
     {
+
         $client = $this->clientRegistry->getClient($service);
         try {
             $accesstoken = $client->getAccessToken();
             $request->getSession()->set('access_token', $accesstoken);
-                return new JsonResponse($accesstoken, 200);
+            return new JsonResponse($accesstoken, 200);
         } catch (IdentityProviderException $e) {
             return new JsonResponse(["Error" => [
                 "Message" => $e->getMessage(),
                 "Code" => $e->getCode()
-                ]
+            ]
             ]);
         }
     }
@@ -94,12 +103,23 @@ class SecurityController extends AbstractController
         return new JsonResponse(["Message" => "User added"]);
     }
 
-    /**
-     * @Route("/secured", name="api_secured")
-     */
-    public function secured(Request $request): JsonResponse
+    public function login(Request $request): JsonResponse
     {
-        dd($request->headers->get('Authorization'), $request->getSession()->get('access_token') );
-        return new JsonResponse(["Secured" => true]);
+        try {
+            $user = $this->getUser();
+            if ($user) {
+                $token = bin2hex(random_bytes(20));
+                $request->getSession()->set("access_token", $token);
+                return new JsonResponse(["Access Token" => $token]);
+            }
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                "error" => [
+                    "message" => $e->getMessage(),
+                    "code" => $e->getCode()
+                ]
+            ]);
+        }
     }
+
 }
