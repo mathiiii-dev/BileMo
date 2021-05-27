@@ -4,10 +4,13 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
  */
 class User implements UserInterface
 {
@@ -19,36 +22,26 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Votre pseudo ne peut pas faire moins de {{ limit }} caractères",
+     *      maxMessage = "Votre pseudo ne peut pas faire plus de {{ limit }} caractères"
+     * )
      */
-    private string $username;
+    private $username;
 
     /**
      * @ORM\Column(type="json")
      */
-    private array $roles = [];
+    private $roles = [];
 
     /**
-     * @var ?string The hashed password
-     * @ORM\Column(type="string", nullable=true)
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
-    private ?string $password;
-
-    /**
-     * @ORM\Column(type="string", length=200, nullable=true)
-     */
-    private ?string $email;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private ?string $github_id;
-
-    /**
-     * @ORM\Column(type="string", unique=true, nullable=true)
-     */
-     private $apiToken;
-
+    private $password;
 
     public function getId(): ?int
     {
@@ -62,7 +55,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -94,12 +87,12 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -124,47 +117,5 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(?string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    public function getGithubId(): ?string
-    {
-        return $this->github_id;
-    }
-
-    public function setGithubId(?string $github_id): self
-    {
-        $this->github_id = $github_id;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getApiToken()
-    {
-        return $this->apiToken;
-    }
-
-    /**
-     * @param mixed $apiToken
-     * @return User
-     */
-    public function setApiToken($apiToken)
-    {
-        $this->apiToken = $apiToken;
-        return $this;
     }
 }
