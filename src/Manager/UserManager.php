@@ -31,6 +31,7 @@ class UserManager
         $user = new User();
         $user->setUsername($userRequest->getUsername());
         $user->setPassword($this->passwordEncoder->encodePassword($user, $userRequest->getPassword()));
+        $user->setEmail($userRequest->getEmail());
 
         $this->checkPassword($userRequest->getPassword());
         $this->validatorService->validator($user);

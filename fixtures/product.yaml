@@ -1,0 +1,10 @@
+App\Entity\Product:
+  product_{1..20}:
+    product: <name()>
+    description: <realText(200, 2)>
+    stock: <numberBetween(0, 9000)>
+    price: <randomFloat(2, 200, 1300)>
+    brand: <name()>
+    color: <safeColorName()>
+    reference: <isbn10()>
+    release_date: <dateTime('now', null)>
