@@ -4,3 +4,8 @@
 
 api_login_check:
   path: /api/login_check
+  methods: POST
+
+api_logout:
+  path: /api/logout
+  methods: GET

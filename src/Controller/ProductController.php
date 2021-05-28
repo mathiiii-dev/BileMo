@@ -13,7 +13,7 @@ class ProductController extends AbstractController
      */
     public function index(): Response
     {
-        $user =$this->getUser();
+        $user = $this->getUser();
         return $this->json(["message" => "ça marche", "user" => $user->getUsername()], 200);
     }
 }

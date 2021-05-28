@@ -36,6 +36,9 @@ security:
             anonymous: true
             lazy: true
             provider: app_user_provider
+            logout:
+                path: api_logout
+                invalidate_session: true
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication

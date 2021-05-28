@@ -2,27 +2,25 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ValidatorService
 {
-    /**
-     * @var \Symfony\Component\Validator\Validator\ValidatorInterface
-     */
-    private $validator;
+    private ValidatorInterface $validator;
 
     public function __construct(ValidatorInterface $validator)
     {
         $this->validator = $validator;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function validator($object)
     {
         $errors = $this->validator->validate($object);
         if (count($errors) > 0) {
-            throw new \Exception($errors[0]->getMessage());
+            throw new \Exception($errors[0]->getMessage(), 401);
         }
-        return true;
     }
 }
