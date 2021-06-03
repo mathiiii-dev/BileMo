@@ -1,13 +1,12 @@
 <?php
 
-
 namespace App\Manager;
 
-
 use App\Entity\Customer;
+use App\Repository\CustomerRepository;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\This;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class CustomerManager
@@ -15,16 +14,19 @@ class CustomerManager
     private EntityManagerInterface $entityManager;
     private UserManager $userManager;
     private ValidatorService $validatorService;
+    private CustomerRepository $customerRepository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserManager $userManager,
-        ValidatorService $validatorService
+        ValidatorService $validatorService,
+        CustomerRepository $customerRepository
     )
     {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
         $this->validatorService = $validatorService;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -45,5 +47,37 @@ class CustomerManager
         $this->entityManager->flush();
 
         return $customer;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function deleteCustomer(int $id, UserInterface $user)
+    {
+        $customer = $this->getCustomerById($id);
+        $this->checkClientForCustomer($customer, $user);
+        $this->entityManager->remove($customer);
+        $this->entityManager->flush();
+    }
+
+    public function getCustomerById(int $id): Customer
+    {
+        $customer = $this->customerRepository->findOneBy(["id" => $id]);
+
+        if (!$customer) {
+            throw new NotFoundHttpException("The customer haven't been found");
+        }
+
+        return $customer;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function checkClientForCustomer(Customer $customer, UserInterface $user)
+    {
+        if ($customer->getClient()->getId() !== $this->userManager->getUserByUsername($user->getUsername())->getId()) {
+            throw new \Exception("You can't delete this customer");
+        }
     }
 }

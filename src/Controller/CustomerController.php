@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Customer;
 use App\Manager\CustomerManager;
-use phpDocumentor\Reflection\Types\This;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,5 +32,16 @@ class CustomerController extends AbstractController
         $customer = $this->customerManager->addCustomer($customerRequest, $this->getUser());
 
         return new JsonResponse(["success" => $customer->getUsername() . " a été enregistré"], 200);
+    }
+
+    /**
+     * @Route("/delete-customer/{id}", name="delete_customer", methods={"DELETE"})
+     * @throws \Exception
+     */
+    public function delete(int $id): JsonResponse
+    {
+        $this->customerManager->deleteCustomer($id, $this->getUser());
+
+        return new JsonResponse(["success" => "The customer have been deleted"], 200);
     }
 }
