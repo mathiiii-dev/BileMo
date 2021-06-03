@@ -6,7 +6,6 @@ use App\Manager\ProductManager;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
@@ -25,7 +24,7 @@ class ProductController extends AbstractController
      */
     public function product(int $id): JsonResponse
     {
-        return $this->json([ "product" => $this->productManager->getProduct($id)], 200);
+        return $this->json(["product" => $this->productManager->getProduct($id)], 200);
     }
 
     /**
@@ -37,6 +36,6 @@ class ProductController extends AbstractController
         $perPage = 10;
         $offset = $perPage * ($currentPage - 1);
 
-        return $this->json([ "products" => $this->productManager->getProducts($page, $offset)], 200);
+        return $this->json(["products" => $this->productManager->getProducts($page, $offset)], 200);
     }
 }

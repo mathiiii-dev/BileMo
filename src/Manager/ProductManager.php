@@ -37,7 +37,7 @@ class ProductManager
         }
 
         if (empty($products)) {
-            throw new NotFoundHttpException("Plus aucun produit n'a été trouvé");
+            throw new NotFoundHttpException("Plus aucun produit n'a été trouvé", null, 404);
         }
 
         return $products;
