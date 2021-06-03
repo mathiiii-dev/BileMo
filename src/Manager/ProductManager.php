@@ -20,7 +20,7 @@ class ProductManager
         $product = $this->productRepository->findOneBy(["id" => $id]);
 
         if ($product === null) {
-            throw new NotFoundHttpException("Le produit n'a pas été trouvé");
+            throw new NotFoundHttpException("The product n°".$id." hasn't been found");
         }
 
         return $product;
@@ -37,7 +37,7 @@ class ProductManager
         }
 
         if (empty($products)) {
-            throw new NotFoundHttpException("Plus aucun produit n'a été trouvé", null, 404);
+            throw new NotFoundHttpException("No products have been found", null, 404);
         }
 
         return $products;

@@ -38,6 +38,6 @@ class SecurityController extends AbstractController
         $userRequest = $this->serializer->deserialize($request->getContent(), User::class, 'json');
         $user = $this->userManager->addUser($userRequest);
 
-        return new JsonResponse(["success" => $user->getUsername() . " a été enregistré"], 200);
+        return new JsonResponse(["success" => $user->getUsername() . " has been registered"], 200);
     }
 }
