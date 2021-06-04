@@ -22,7 +22,7 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/add-customer", name="add_customer", methods={"POST"})
+     * @Route("/customer/add", name="add_customer", methods={"POST"})
      * @throws \Exception
      */
     public function add(Request $request): JsonResponse
@@ -35,7 +35,7 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/delete-customer/{id}", name="delete_customer", methods={"DELETE"})
+     * @Route("/customer/delete/{id}", name="delete_customer", methods={"DELETE"})
      * @throws \Exception
      */
     public function delete(int $id): JsonResponse
@@ -46,7 +46,7 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/get-customer/{id}", name="get_customer", methods={"GET"})
+     * @Route("/customer/{id}", name="get_customer", methods={"GET"})
      */
     public function getOne(int $id): JsonResponse
     {
@@ -54,10 +54,12 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/get-customers/{id}", name="get_customers", methods={"GET"})
+     * @Route("/customers", name="get_customers", methods={"GET"})
      */
-    public function getAll(int $id): JsonResponse
+    public function getAll(Request $request): JsonResponse
     {
-        return $this->json($this->customerManager->getAllCustomerByClient($id));
+        $id = $request->get("id");
+        $page = $request->get("page");
+        return $this->json($this->customerManager->getAllCustomerByClient($id, $page));
     }
 }

@@ -4,15 +4,18 @@ namespace App\Manager;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
+use App\Service\PaginationService;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductManager
 {
     private ProductRepository $productRepository;
+    private PaginationService $pagination;
 
-    public function __construct(ProductRepository $productRepository)
+    public function __construct(ProductRepository $productRepository, PaginationService $pagination)
     {
         $this->productRepository = $productRepository;
+        $this->pagination = $pagination;
     }
 
     public function getProduct(int $id): Product
@@ -26,15 +29,10 @@ class ProductManager
         return $product;
     }
 
-    public function getProducts(int $page, int $offset): array
+    public function getProducts(int $page): array
     {
-        $products = [];
-
-        foreach ($this->productRepository->findBy([], [], 10, $offset) as $product) {
-            $products[] = [
-                "product" => $product
-            ];
-        }
+        $pagination = $this->pagination->getPagination($page);
+        $products = $this->productRepository->findBy([], [], $pagination["limit"], $pagination["offset"]);
 
         if (empty($products)) {
             throw new NotFoundHttpException("No products have been found", null, 404);

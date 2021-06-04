@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
+use App\Service\PaginationService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -15,18 +16,21 @@ class CustomerManager
     private UserManager $userManager;
     private ValidatorService $validatorService;
     private CustomerRepository $customerRepository;
+    private PaginationService $pagination;
 
     public function __construct(
         EntityManagerInterface $entityManager,
         UserManager $userManager,
         ValidatorService $validatorService,
-        CustomerRepository $customerRepository
+        CustomerRepository $customerRepository,
+        PaginationService $pagination
     )
     {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
         $this->validatorService = $validatorService;
         $this->customerRepository = $customerRepository;
+        $this->pagination = $pagination;
     }
 
     /**
@@ -76,14 +80,21 @@ class CustomerManager
      */
     public function checkClientForCustomer(Customer $customer, UserInterface $user)
     {
-        if ($customer->getClient()->getId() !== $this->userManager->getUserByUsername($user->getUsername())->getId()) {
+        if ($customer->getClient() !== $this->userManager->getUserByUsername($user->getUsername())->getId()) {
             throw new \Exception("You can't delete this customer");
         }
     }
 
-    public function getAllCustomerByClient(int $id): array
+    public function getAllCustomerByClient(int $id, int $page): array
     {
         $this->userManager->getUserById($id);
-        return $this->customerRepository->findBy(["client" => $id]);
+        $pagination = $this->pagination->getPagination($page);
+        $customers = $this->customerRepository->findBy(["client" => $id], [], $pagination["limit"], $pagination["offset"]);
+
+        if (empty($customers)) {
+            throw new NotFoundHttpException("No customers have been found", null, 404);
+        }
+
+        return $customers;
     }
 }
