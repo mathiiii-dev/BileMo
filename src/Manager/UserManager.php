@@ -64,6 +64,18 @@ class UserManager
         if(!$user) {
             throw new NotFoundHttpException("The client haven't been found");
         }
+
+        return $user;
+    }
+
+    public function getUserById(int $id): ?User
+    {
+        $user = $this->userRepository->findOneBy(["id" => $id]);
+
+        if(!$user) {
+            throw new NotFoundHttpException("The client haven't been found");
+        }
+
         return $user;
     }
 }

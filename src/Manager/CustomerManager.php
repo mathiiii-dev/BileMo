@@ -80,4 +80,10 @@ class CustomerManager
             throw new \Exception("You can't delete this customer");
         }
     }
+
+    public function getAllCustomerByClient(int $id): array
+    {
+        $this->userManager->getUserById($id);
+        return $this->customerRepository->findBy(["client" => $id]);
+    }
 }

@@ -44,4 +44,20 @@ class CustomerController extends AbstractController
 
         return new JsonResponse(["success" => "The customer has been deleted"], 200);
     }
+
+    /**
+     * @Route("/get-customer/{id}", name="get_customer", methods={"GET"})
+     */
+    public function getOne(int $id): JsonResponse
+    {
+        return $this->json($this->customerManager->getCustomerById($id));
+    }
+
+    /**
+     * @Route("/get-customers/{id}", name="get_customers", methods={"GET"})
+     */
+    public function getAll(int $id): JsonResponse
+    {
+        return $this->json($this->customerManager->getAllCustomerByClient($id));
+    }
 }
