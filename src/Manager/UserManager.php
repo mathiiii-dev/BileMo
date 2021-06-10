@@ -31,25 +31,6 @@ class UserManager
     /**
      * @throws \Exception
      */
-    public function addUser($userRequest): User
-    {
-        $user = new User();
-        $user->setUsername($userRequest->getUsername());
-        $user->setPassword($this->passwordEncoder->encodePassword($user, $userRequest->getPassword()));
-        $user->setEmail($userRequest->getEmail());
-
-        $this->checkPassword($userRequest->getPassword());
-        $this->validatorService->validator($user);
-
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
-
-        return $user;
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function checkPassword(string $password)
     {
         if(strlen($password) < 8) {

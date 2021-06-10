@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Manager\UserManager;
 use App\Service\ValidatorService;
+use App\User\UserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,17 +16,17 @@ use Symfony\Component\Serializer\SerializerInterface;
 class SecurityController extends AbstractController
 {
     private SerializerInterface $serializer;
-    private UserManager $userManager;
     private ValidatorService $validatorService;
+    private UserHandler $userHandler;
 
     public function __construct(
         SerializerInterface $serializer,
-        UserManager $userManager,
-        ValidatorService $validatorService
+        ValidatorService $validatorService,
+        UserHandler $userHandler
     ) {
         $this->serializer = $serializer;
-        $this->userManager = $userManager;
         $this->validatorService = $validatorService;
+        $this->userHandler = $userHandler;
     }
 
     /**
@@ -36,7 +37,7 @@ class SecurityController extends AbstractController
     {
         /** @var User $requestBody */
         $userRequest = $this->serializer->deserialize($request->getContent(), User::class, 'json');
-        $user = $this->userManager->addUser($userRequest);
+        $user = $this->userHandler->handle($userRequest);
 
         return new JsonResponse(["success" => $user->getUsername() . " has been registered"], 200);
     }
