@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Customer\CustomerHandler;
 use App\Entity\Customer;
+use App\Manager\CustomerManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +15,16 @@ class CustomerController extends AbstractController
 {
     private SerializerInterface $serializer;
     private CustomerHandler $customerHandler;
+    private CustomerManager $customerManager;
 
-    public function __construct(SerializerInterface $serializer, CustomerHandler $customerHandler)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        CustomerHandler $customerHandler,
+        CustomerManager $customerManager
+    ){
         $this->serializer = $serializer;
         $this->customerHandler = $customerHandler;
+        $this->customerManager = $customerManager;
     }
 
     /**
@@ -40,7 +46,9 @@ class CustomerController extends AbstractController
      */
     public function delete(int $id): JsonResponse
     {
-        $this->customerManager->deleteCustomer($id, $this->getUser());
+        $customer = $this->customerManager->getCustomerById($id);
+        $this->denyAccessUnlessGranted('owner', $customer);
+        $this->customerManager->deleteCustomer($customer, $this->getUser());
 
         return new JsonResponse(["success" => "The customer has been deleted"], 200);
     }

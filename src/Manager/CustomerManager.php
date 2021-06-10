@@ -36,10 +36,8 @@ class CustomerManager
     /**
      * @throws \Exception
      */
-    public function deleteCustomer(int $id, UserInterface $user)
+    public function deleteCustomer(Customer $customer)
     {
-        $customer = $this->getCustomerById($id);
-        $this->checkClientForCustomer($customer, $user);
         $this->entityManager->remove($customer);
         $this->entityManager->flush();
     }
@@ -53,16 +51,6 @@ class CustomerManager
         }
 
         return $customer;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function checkClientForCustomer(Customer $customer, UserInterface $user)
-    {
-        if ($customer->getClient() !== $this->userManager->getUserByUsername($user->getUsername())->getId()) {
-            throw new \Exception("You can't delete this customer");
-        }
     }
 
     public function getAllCustomerByClient(int $id, int $page): array
