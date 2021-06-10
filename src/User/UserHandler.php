@@ -5,6 +5,7 @@ namespace App\User;
 
 
 use App\Manager\UserManager;
+use App\Service\PasswordCheckService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,26 +16,28 @@ class UserHandler
     private UserManager $userManager;
     private ValidatorService $validator;
     private EntityManagerInterface $entityManager;
+    private PasswordCheckService $passwordCheck;
 
     public function __construct(
         UserFactory $userFactory,
-        UserManager $userManager,
         ValidatorService $validator,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        PasswordCheckService $passwordCheck
     ) {
         $this->userFactory = $userFactory;
-        $this->userManager = $userManager;
         $this->validator = $validator;
         $this->entityManager = $entityManager;
+        $this->passwordCheck = $passwordCheck;
     }
 
     /**
      * @throws \Exception
      */
-    public function handle($userRequest) {
+    public function handle($userRequest): \App\Entity\User
+    {
         $user = $this->userFactory->createUser($userRequest);
 
-        $this->userManager->checkPassword($userRequest->getPassword());
+        $this->passwordCheck->checkPassword($userRequest->getPassword());
         $this->validator->validator($user);
 
         $this->entityManager->persist($user);

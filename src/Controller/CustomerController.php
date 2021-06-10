@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
+use App\Customer\CustomerHandler;
 use App\Entity\Customer;
-use App\Manager\CustomerManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,12 +13,12 @@ use Symfony\Component\Serializer\SerializerInterface;
 class CustomerController extends AbstractController
 {
     private SerializerInterface $serializer;
-    private CustomerManager $customerManager;
+    private CustomerHandler $customerHandler;
 
-    public function __construct(SerializerInterface $serializer, CustomerManager $customerManager)
+    public function __construct(SerializerInterface $serializer, CustomerHandler $customerHandler)
     {
         $this->serializer = $serializer;
-        $this->customerManager = $customerManager;
+        $this->customerHandler = $customerHandler;
     }
 
     /**
@@ -29,7 +29,7 @@ class CustomerController extends AbstractController
     {
         /** @var \App\Entity\Customer $requestBody */
         $customerRequest = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
-        $customer = $this->customerManager->addCustomer($customerRequest, $this->getUser());
+        $customer = $this->customerHandler->handle($customerRequest, $this->getUser());
 
         return new JsonResponse(["success" => $customer->getUsername() . " has been registered"], 200);
     }

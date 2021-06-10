@@ -28,16 +28,6 @@ class UserManager
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function checkPassword(string $password)
-    {
-        if(strlen($password) < 8) {
-            throw new \Exception("Password too short (min. 8 character)", 403);
-        }
-    }
-
     public function getUserByUsername(string $username): ?User
     {
         $user = $this->userRepository->findOneBy(["username" => $username]);

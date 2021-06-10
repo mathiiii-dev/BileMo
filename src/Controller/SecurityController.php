@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Manager\UserManager;
 use App\Service\ValidatorService;
 use App\User\UserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

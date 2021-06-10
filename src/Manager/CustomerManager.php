@@ -36,26 +36,6 @@ class CustomerManager
     /**
      * @throws \Exception
      */
-    public function addCustomer(Customer $customerRequest, UserInterface $user): Customer
-    {
-        $customer = new Customer();
-        $customer->setUsername($customerRequest->getUsername());
-        $customer->setEmail($customerRequest->getEmail());
-        $customer->setTelephone($customerRequest->getTelephone());
-        $customer->setPassword($customerRequest->getPassword());
-        $customer->setClient($this->userManager->getUserByUsername($user->getUsername()));
-
-        $this->validatorService->validator($customer);
-
-        $this->entityManager->persist($customer);
-        $this->entityManager->flush();
-
-        return $customer;
-    }
-
-    /**
-     * @throws \Exception
-     */
     public function deleteCustomer(int $id, UserInterface $user)
     {
         $customer = $this->getCustomerById($id);
