@@ -23,7 +23,7 @@ class CustomerHandler
     /**
      * @throws \Exception
      */
-    public function handle($customerRequest, UserInterface $user): Customer
+    public function createCustomerHandler($customerRequest, UserInterface $user): Customer
     {
         $customer = $this->customerFactory->createCustomer($customerRequest, $user);
         $this->validator->validator($customer);
@@ -32,5 +32,11 @@ class CustomerHandler
         $this->entityManager->flush();
 
         return $customer;
+    }
+
+    public function deleteCustomerHandler(Customer $customer)
+    {
+        $this->entityManager->remove($customer);
+        $this->entityManager->flush();
     }
 }

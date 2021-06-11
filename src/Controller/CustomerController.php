@@ -35,7 +35,7 @@ class CustomerController extends AbstractController
     {
         /** @var \App\Entity\Customer $requestBody */
         $customerRequest = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
-        $customer = $this->customerHandler->handle($customerRequest, $this->getUser());
+        $customer = $this->customerHandler->createCustomerHandler($customerRequest, $this->getUser());
 
         return new JsonResponse(["success" => $customer->getUsername() . " has been registered"], 200);
     }
@@ -48,7 +48,7 @@ class CustomerController extends AbstractController
     {
         $customer = $this->customerManager->getCustomerById($id);
         $this->denyAccessUnlessGranted('owner', $customer);
-        $this->customerManager->deleteCustomer($customer, $this->getUser());
+        $this->customerHandler->deleteCustomerHandler($customer);
 
         return new JsonResponse(["success" => "The customer has been deleted"], 200);
     }

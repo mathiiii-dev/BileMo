@@ -1,19 +1,15 @@
 <?php
 
-
 namespace App\User;
 
-
-use App\Manager\UserManager;
+use App\Entity\User;
 use App\Service\PasswordCheckService;
 use App\Service\ValidatorService;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserHandler
 {
     private UserFactory $userFactory;
-    private UserManager $userManager;
     private ValidatorService $validator;
     private EntityManagerInterface $entityManager;
     private PasswordCheckService $passwordCheck;
@@ -33,7 +29,7 @@ class UserHandler
     /**
      * @throws \Exception
      */
-    public function handle($userRequest): \App\Entity\User
+    public function handle($userRequest): User
     {
         $user = $this->userFactory->createUser($userRequest);
 

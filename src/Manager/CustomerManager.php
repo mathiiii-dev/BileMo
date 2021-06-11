@@ -8,7 +8,6 @@ use App\Service\PaginationService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class CustomerManager
 {
@@ -31,15 +30,6 @@ class CustomerManager
         $this->validatorService = $validatorService;
         $this->customerRepository = $customerRepository;
         $this->pagination = $pagination;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    public function deleteCustomer(Customer $customer)
-    {
-        $this->entityManager->remove($customer);
-        $this->entityManager->flush();
     }
 
     public function getCustomerById(int $id): Customer
