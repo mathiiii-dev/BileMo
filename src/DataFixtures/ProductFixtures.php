@@ -11,8 +11,8 @@ class ProductFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-       $faker = new Factory();
-        for ($i = 0; $i < 20; $i++) {
+        $faker = new Factory();
+        for ($i = 0; $i < 20; ++$i) {
             $product = new Product();
             $product->setProduct($faker::create()->name)
                 ->setReference($faker::create()->isbn10)

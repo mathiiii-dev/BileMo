@@ -30,6 +30,7 @@ class SecurityController extends AbstractController
 
     /**
      * @Route("/sign-in", name="api_security_sign_in", methods={"POST"})
+     *
      * @throws \Exception
      */
     public function signIn(Request $request): Response
@@ -38,6 +39,6 @@ class SecurityController extends AbstractController
         $userRequest = $this->serializer->deserialize($request->getContent(), User::class, 'json');
         $user = $this->userHandler->handle($userRequest);
 
-        return new JsonResponse(["success" => $user->getUsername() . " has been registered"], 200);
+        return new JsonResponse(['success' => $user->getUsername().' has been registered'], 200);
     }
 }

@@ -23,8 +23,7 @@ class CustomerManager
         ValidatorService $validatorService,
         CustomerRepository $customerRepository,
         PaginationService $pagination
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
         $this->validatorService = $validatorService;
@@ -34,7 +33,7 @@ class CustomerManager
 
     public function getCustomerById(int $id): Customer
     {
-        $customer = $this->customerRepository->findOneBy(["id" => $id]);
+        $customer = $this->customerRepository->findOneBy(['id' => $id]);
 
         if (!$customer) {
             throw new NotFoundHttpException("The customer hasn't been found");
@@ -47,10 +46,10 @@ class CustomerManager
     {
         $this->userManager->getUserById($id);
         $pagination = $this->pagination->getPagination($page);
-        $customers = $this->customerRepository->findBy(["client" => $id], [], $pagination["limit"], $pagination["offset"]);
+        $customers = $this->customerRepository->findBy(['client' => $id], [], $pagination['limit'], $pagination['offset']);
 
         if (empty($customers)) {
-            throw new NotFoundHttpException("No customers have been found", null, 404);
+            throw new NotFoundHttpException('No customers have been found', null, 404);
         }
 
         return $customers;

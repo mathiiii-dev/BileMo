@@ -33,7 +33,8 @@ class ProductController extends AbstractController
      */
     public function products(Request $request): JsonResponse
     {
-        $page = $request->get("page");
+        $page = $request->get('page');
+
         return $this->json($this->productManager->getProducts($page), 200);
     }
 }

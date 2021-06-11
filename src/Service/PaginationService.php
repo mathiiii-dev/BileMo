@@ -4,15 +4,15 @@ namespace App\Service;
 
 class PaginationService
 {
-    public function getPagination($page)
+    public function getPagination($page): array
     {
         $currentPage = $page ?? 1;
         $limit = 10;
         $offset = $limit * ($currentPage - 1);
 
         return [
-            "limit" => $limit,
-            "offset" => $offset
+            'limit' => $limit,
+            'offset' => $offset,
         ];
     }
 }

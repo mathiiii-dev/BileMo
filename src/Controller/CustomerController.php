@@ -21,7 +21,7 @@ class CustomerController extends AbstractController
         SerializerInterface $serializer,
         CustomerHandler $customerHandler,
         CustomerManager $customerManager
-    ){
+    ) {
         $this->serializer = $serializer;
         $this->customerHandler = $customerHandler;
         $this->customerManager = $customerManager;
@@ -29,6 +29,7 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/add", name="add_customer", methods={"POST"})
+     *
      * @throws \Exception
      */
     public function add(Request $request): JsonResponse
@@ -37,11 +38,12 @@ class CustomerController extends AbstractController
         $customerRequest = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
         $customer = $this->customerHandler->createCustomerHandler($customerRequest, $this->getUser());
 
-        return new JsonResponse(["success" => $customer->getUsername() . " has been registered"], 200);
+        return new JsonResponse(['success' => $customer->getUsername().' has been registered'], 200);
     }
 
     /**
      * @Route("/customer/delete/{id}", name="delete_customer", methods={"DELETE"})
+     *
      * @throws \Exception
      */
     public function delete(int $id): JsonResponse
@@ -50,7 +52,7 @@ class CustomerController extends AbstractController
         $this->denyAccessUnlessGranted('owner', $customer);
         $this->customerHandler->deleteCustomerHandler($customer);
 
-        return new JsonResponse(["success" => "The customer has been deleted"], 200);
+        return new JsonResponse(['success' => 'The customer has been deleted'], 200);
     }
 
     /**
@@ -66,8 +68,9 @@ class CustomerController extends AbstractController
      */
     public function getAll(Request $request): JsonResponse
     {
-        $id = $request->get("id");
-        $page = $request->get("page");
+        $id = $request->get('id');
+        $page = $request->get('page');
+
         return $this->json($this->customerManager->getAllCustomerByClient($id, $page));
     }
 }

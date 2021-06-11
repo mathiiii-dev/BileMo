@@ -15,27 +15,27 @@ class ExceptionListener
 
         $response = new JsonResponse();
         $data = [
-            "error" => [
-                "message" => $exception->getMessage(),
-                "code" => $exception->getCode()
-            ]
+            'error' => [
+                'message' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+            ],
         ];
 
-        if($exception instanceof NotFoundHttpException ){
+        if ($exception instanceof NotFoundHttpException) {
             $data = [
-                "error" => [
+                'error' => [
                     'code' => $exception->getStatusCode(),
-                    'message' => $exception->getMessage()
-                ]
+                    'message' => $exception->getMessage(),
+                ],
             ];
         }
 
         if ($exception instanceof HttpExceptionInterface) {
             $data = [
-                "error" => [
+                'error' => [
                     'code' => $exception->getStatusCode(),
-                    'message' => $exception->getMessage()
-                ]
+                    'message' => $exception->getMessage(),
+                ],
             ];
         }
 

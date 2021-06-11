@@ -25,14 +25,12 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
     {
         $faker = new Factory();
 
-
         $clients = $this->userRepository->findAll();
 
-        for ($i = 0; $i < 20; $i++) {
-
+        for ($i = 0; $i < 20; ++$i) {
             $client = array_rand($clients);
             $customer = new Customer();
-            $customer->setPassword("password")
+            $customer->setPassword('password')
                 ->setEmail($faker::create()->email)
                 ->setUsername($faker::create()->userName)
                 ->setTelephone($faker::create()->randomNumber(9))
