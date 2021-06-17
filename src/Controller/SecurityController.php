@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Service\ValidatorService;
-use App\User\UserHandler;
+use App\Handler\UserHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,9 +35,7 @@ class SecurityController extends AbstractController
      */
     public function signIn(Request $request): Response
     {
-        /** @var User $requestBody */
-        $userRequest = $this->serializer->deserialize($request->getContent(), User::class, 'json');
-        $user = $this->userHandler->handle($userRequest);
+        $user = $this->userHandler->createUserHandler($request);
 
         return new JsonResponse(['success' => $user->getUsername().' has been registered'], 200);
     }

@@ -1,31 +1,38 @@
 <?php
 
-namespace App\Customer;
+namespace App\Handler;
 
 use App\Entity\Customer;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class CustomerHandler
 {
-    private CustomerFactory $customerFactory;
     private ValidatorService $validator;
     private EntityManagerInterface $entityManager;
+    private SerializerInterface $serializer;
 
-    public function __construct(CustomerFactory $customerFactory, ValidatorService $validator, EntityManagerInterface $entityManager)
-    {
-        $this->customerFactory = $customerFactory;
+    public function __construct(
+        ValidatorService $validator,
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer
+    ) {
         $this->validator = $validator;
         $this->entityManager = $entityManager;
+        $this->serializer = $serializer;
     }
 
     /**
      * @throws \Exception
      */
-    public function createCustomerHandler($customerRequest, UserInterface $user): Customer
+    public function createCustomerHandler(Request $request, UserInterface $user): Customer
     {
-        $customer = $this->customerFactory->createCustomer($customerRequest, $user);
+        /** @var \App\Entity\Customer $requestBody */
+        $customer = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
+        $customer->setClient($user);
         $this->validator->validator($customer);
 
         $this->entityManager->persist($customer);

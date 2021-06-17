@@ -2,8 +2,7 @@
 
 namespace App\Controller;
 
-use App\Customer\CustomerHandler;
-use App\Entity\Customer;
+use App\Handler\CustomerHandler;
 use App\Manager\CustomerManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,15 +16,13 @@ class CustomerController extends AbstractController
     private SerializerInterface $serializer;
     private CustomerHandler $customerHandler;
     private CustomerManager $customerManager;
-    /**
-     * @var \Symfony\Component\Serializer\Normalizer\NormalizerInterface
-     */
     private NormalizerInterface $normalizer;
 
     public function __construct(
         SerializerInterface $serializer,
         CustomerManager $customerManager,
-        NormalizerInterface $normalizer
+        NormalizerInterface $normalizer,
+        CustomerHandler $customerHandler
     ) {
         $this->serializer = $serializer;
         $this->customerHandler = $customerHandler;
@@ -40,9 +37,7 @@ class CustomerController extends AbstractController
      */
     public function add(Request $request): JsonResponse
     {
-        /** @var \App\Entity\Customer $requestBody */
-        $customerRequest = $this->serializer->deserialize($request->getContent(), Customer::class, 'json');
-        $customer = $this->customerHandler->createCustomerHandler($customerRequest, $this->getUser());
+        $customer = $this->customerHandler->createCustomerHandler($request, $this->getUser());
 
         return new JsonResponse(['success' => $customer->getUsername().' has been registered'], 200);
     }
@@ -63,30 +58,32 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/{id}", name="get_customer", methods={"GET"})
+     *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function getOne(int $id): JsonResponse
     {
         return $this->json($this->normalizer->normalize($this->customerManager->getCustomerById($id), null, [
-            'circular_reference_handler' => function($object) {
+            'circular_reference_handler' => function ($object) {
                 return $object->getId();
-            }
+            },
         ]));
     }
 
     /**
      * @Route("/customers", name="get_customers", methods={"GET"})
+     *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function getAll(Request $request): JsonResponse
     {
-        $id = $request->get("id");
-        $page = $request->get("page");
+        $id = $request->get('id');
+        $page = $request->get('page');
 
         return $this->json($this->normalizer->normalize($this->customerManager->getAllCustomerByClient($id, $page), null, [
-            'circular_reference_handler' => function($object) {
+            'circular_reference_handler' => function ($object) {
                 return $object->getId();
-            }
+            },
         ]));
     }
 }
