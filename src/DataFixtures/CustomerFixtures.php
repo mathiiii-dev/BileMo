@@ -3,13 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\Customer;
-use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
-use http\Client;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CustomerFixtures extends Fixture implements DependentFixtureInterface
@@ -26,7 +24,6 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = new Factory();
-
 
         $clients = $this->userRepository->findAll();
 

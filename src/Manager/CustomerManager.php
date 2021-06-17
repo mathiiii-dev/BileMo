@@ -24,8 +24,7 @@ class CustomerManager
         ValidatorService $validatorService,
         CustomerRepository $customerRepository,
         PaginationService $pagination
-    )
-    {
+    ) {
         $this->entityManager = $entityManager;
         $this->userManager = $userManager;
         $this->validatorService = $validatorService;

@@ -16,7 +16,7 @@ class ValidatorService
     /**
      * @throws \Exception
      */
-    public function validator($object)
+    public function validator($object): void
     {
         $errors = $this->validator->validate($object);
         if (count($errors) > 0) {

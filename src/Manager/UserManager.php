@@ -50,7 +50,7 @@ class UserManager
     /**
      * @throws \Exception
      */
-    public function checkPassword(string $password)
+    public function checkPassword(string $password): void
     {
         if(strlen($password) < 8) {
             throw new \Exception("Password too short (min. 8 character)", 403);

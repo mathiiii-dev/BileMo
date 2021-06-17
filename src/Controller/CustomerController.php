@@ -8,17 +8,26 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class CustomerController extends AbstractController
 {
     private SerializerInterface $serializer;
     private CustomerManager $customerManager;
+    /**
+     * @var \Symfony\Component\Serializer\Normalizer\NormalizerInterface
+     */
+    private NormalizerInterface $normalizer;
 
-    public function __construct(SerializerInterface $serializer, CustomerManager $customerManager)
-    {
+    public function __construct(
+        SerializerInterface $serializer,
+        CustomerManager $customerManager,
+        NormalizerInterface $normalizer
+    ) {
         $this->serializer = $serializer;
         $this->customerManager = $customerManager;
+        $this->normalizer = $normalizer;
     }
 
     /**
@@ -47,19 +56,30 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/{id}", name="get_customer", methods={"GET"})
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function getOne(int $id): JsonResponse
     {
-        return $this->json($this->customerManager->getCustomerById($id));
+        return $this->json($this->normalizer->normalize($this->customerManager->getCustomerById($id), null, [
+            'circular_reference_handler' => function($object) {
+                return $object->getId();
+            }
+        ]));
     }
 
     /**
      * @Route("/customers", name="get_customers", methods={"GET"})
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
     public function getAll(Request $request): JsonResponse
     {
         $id = $request->get("id");
         $page = $request->get("page");
-        return $this->json($this->customerManager->getAllCustomerByClient($id, $page));
+
+        return $this->json($this->normalizer->normalize($this->customerManager->getAllCustomerByClient($id, $page), null, [
+            'circular_reference_handler' => function($object) {
+                return $object->getId();
+            }
+        ]));
     }
 }
