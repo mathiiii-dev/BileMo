@@ -7,10 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
+ * @OA\Schema()
  */
 class Customer
 {
@@ -19,6 +21,7 @@ class Customer
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"customer"})
+     * @OA\Property(type="integer")
      */
     private ?int $id;
 
@@ -31,6 +34,7 @@ class Customer
      *      maxMessage = "Le pseudo ne peut pas faire plus de {{ limit }} caractères"
      * )
      * @Groups({"customer"})
+     * @OA\Property(type="string")
      */
     private ?string $username;
 
@@ -45,12 +49,14 @@ class Customer
      * @Assert\Email(
      *     message = "The email {{ value }} is not a valid email."
      * )
+     * @OA\Property(type="string")
      * @Groups({"customer"})
      */
     private ?string $email;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @OA\Property(type="string")
      * @Assert\Regex(
      *     pattern="/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/",
      *     message="Phone format is incorrect."

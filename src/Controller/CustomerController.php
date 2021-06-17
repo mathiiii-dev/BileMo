@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Handler\CustomerHandler;
 use App\Manager\CustomerManager;
+use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,6 +33,15 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/add", name="add_customer", methods={"POST"})
+     * @OA\Post(
+     *     path="/customer/add",
+     *     @OA\RequestBody(ref="#/components/requestBodies/customerAdd"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Create a customer",
+     *      @OA\JsonContent(example="Customer1 has been registered")
+     * )
+     * )
      *
      * @throws \Exception
      */
@@ -44,6 +54,21 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/delete/{id}", name="delete_customer", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @OA\Delete (
+     *     path="/customer/delete{id}",
+     *     @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      description="The id of the customer",
+     *      required=true
+     *     ),
+     *     @OA\Schema(ref="#/components/parameters/id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Delete a customer",
+     *     @OA\JsonContent(example="The customer has been deleted")
+     * )
+     * )
      *
      * @throws \Exception
      */
@@ -58,6 +83,21 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customer/{id}", name="get_customer", methods={"GET"}, requirements={"id"="\d+"})
+     * @OA\Get(
+     *     path="/customer/{id}",
+     *     @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      description="The id of the customer",
+     *      required=true
+     *     ),
+     *     @OA\Schema(ref="#/components/parameters/id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Customer detail",
+     *     @OA\JsonContent(ref="#/components/schemas/Customer")
+     * )
+     * )
      *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
@@ -73,6 +113,28 @@ class CustomerController extends AbstractController
 
     /**
      * @Route("/customers", name="get_customers", methods={"GET"})
+     * @OA\Get(
+     *     path="/customers",
+     *     @OA\Parameter(
+     *      name="id",
+     *      in="query",
+     *      description="The id of the client",
+     *      required=true
+     *     ),
+     *     @OA\Schema(ref="#/components/parameters/id"),
+     *     @OA\Parameter(
+     *      name="page",
+     *      in="query",
+     *      description="The index of the page",
+     *      required=true
+     *     ),
+     *     @OA\Schema(type="integer"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Product detail",
+     *     @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Customer"))
+     * )
+     * )
      *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */

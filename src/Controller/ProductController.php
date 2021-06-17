@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 class ProductController extends AbstractController
 {
@@ -21,7 +22,22 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}", name="api_get_product", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/product/{id}", name="get_product", methods={"GET"}, requirements={"id"="\d+"})
+     * @OA\Get(
+     *     path="/product/{id}",
+     *     @OA\Parameter(
+     *      name="id",
+     *      in="path",
+     *      description="The id of the product",
+     *      required=true
+     *     ),
+     *     @OA\Schema(ref="#/components/parameters/id"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Product detail",
+     *     @OA\JsonContent(ref="#/components/schemas/Product")
+     * )
+     * )
      */
     public function product(int $id): JsonResponse
     {
@@ -29,7 +45,22 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/products", name="api_get_products", methods={"GET"})
+     * @Route("/products", name="get_products", methods={"GET"})
+     * @OA\Get(
+     *     path="/products",
+     *     @OA\Parameter(
+     *      name="page",
+     *      in="query",
+     *      description="The page index",
+     *      required=true
+     *     ),
+     *     @OA\Schema(type="integer"),
+     *     @OA\Response(
+     *      response="200",
+     *      description="Products list",
+     *     @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Product"))
+     * )
+     * )
      */
     public function products(Request $request): JsonResponse
     {

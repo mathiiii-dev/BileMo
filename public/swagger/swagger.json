@@ -1,0 +1,292 @@
+{
+    "openapi": "3.0.0",
+    "paths": {
+        "/customer/add": {
+            "post": {
+                "operationId": "App\\Controller\\CustomerController::add",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/customerAdd"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create a customer",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "Customer1 has been registered"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customer/delete{id}": {
+            "delete": {
+                "operationId": "App\\Controller\\CustomerController::delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the customer",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete a customer",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The customer has been deleted"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customer/{id}": {
+            "get": {
+                "operationId": "App\\Controller\\CustomerController::getOne",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the customer",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/customers": {
+            "get": {
+                "operationId": "App\\Controller\\CustomerController::getAll",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The id of the client",
+                        "required": true
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The index of the page",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Customer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "operationId": "App\\Controller\\ProductController::product",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the product",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "operationId": "App\\Controller\\ProductController::products",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The page index",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Products list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sign-in": {
+            "post": {
+                "operationId": "App\\Controller\\SecurityController::signIn",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/signin"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create a client",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "Client1 has been registered"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Customer": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "Product": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "stock": {
+                        "type": "integer"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "brand": {
+                        "type": "string"
+                    },
+                    "color": {
+                        "type": "string"
+                    },
+                    "reference": {
+                        "type": "string"
+                    },
+                    "releaseDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {}
+        },
+        "requestBodies": {
+            "customerAdd": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "username",
+                                "password",
+                                "telephone",
+                                "email"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "telephone": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "signin": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "username",
+                                "password",
+                                "email"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
