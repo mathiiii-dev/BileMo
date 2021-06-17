@@ -2,55 +2,42 @@
 
 namespace App\Controller;
 
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use KnpU\OAuth2ClientBundle\Client\Provider\GithubClient;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+use App\Entity\User;
+use App\Manager\UserManager;
+use App\Service\ValidatorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @var \KnpU\OAuth2ClientBundle\Client\ClientRegistry
-     */
-    private ClientRegistry $clientRegistry;
+    private SerializerInterface $serializer;
+    private UserManager $userManager;
+    private ValidatorService $validatorService;
 
-    public function __construct(ClientRegistry $clientRegistry)
-    {
-        $this->clientRegistry = $clientRegistry;
+    public function __construct(
+        SerializerInterface $serializer,
+        UserManager $userManager,
+        ValidatorService $validatorService
+    ) {
+        $this->serializer = $serializer;
+        $this->userManager = $userManager;
+        $this->validatorService = $validatorService;
     }
 
     /**
-     * @Route("/connect/github", name="github_connect")
+     * @Route("/sign-in", name="api_security_sign_in", methods={"POST"})
+     * @throws \Exception
      */
-    public function connect(): RedirectResponse
+    public function signIn(Request $request): Response
     {
-        /** @var GithubClient $client */
-        $client = $this->clientRegistry->getClient('github');
-        return $client->redirect(['read:user', 'user:email']);
-    }
+        /** @var User $requestBody */
+        $userRequest = $this->serializer->deserialize($request->getContent(), User::class, 'json');
+        $user = $this->userManager->addUser($userRequest);
 
-    /**
-     * @Route("/access_token", name="access_token")
-     */
-    public function accessToken(\Symfony\Component\HttpFoundation\Request $request): JsonResponse
-    {
-        /** @var GithubClient $client */
-        $client = $this->clientRegistry->getClient('github');
-        try {
-            $accesstoken = $client->getAccessToken();
-            $request->getSession()->set('access_token', $accesstoken);
-            return new JsonResponse([
-                "access_token" => $accesstoken->getToken()
-            ], 200);
-        } catch (IdentityProviderException $e) {
-            return new JsonResponse(["Error" => [
-                "Message" => $e->getMessage(),
-                "Code" => $e->getCode()
-                ]
-            ]);
-        }
+        return new JsonResponse(["success" => $user->getUsername() . " has been registered"], 200);
     }
 }

@@ -2,6 +2,6 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 
-oauth_check:
-  path: /oauth/check/{service}
-  controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+api_login_check:
+  path: /api/login_check
+  methods: POST
