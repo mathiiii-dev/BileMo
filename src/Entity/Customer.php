@@ -116,7 +116,7 @@ class Customer
 
     public function getClient()
     {
-        return $this->client->getId();
+        return $this->client;
     }
 
     public function setClient(?User $client): self
