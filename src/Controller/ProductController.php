@@ -21,11 +21,11 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}", name="api_get_product", methods={"GET"})
+     * @Route("/product/{id}", name="api_get_product", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function product(int $id): JsonResponse
     {
-        return $this->json($this->productManager->getProduct($id), 200);
+        return $this->json($this->productManager->getProduct($id), 200, [], ['groups' => 'show_detail_product']);
     }
 
     /**
@@ -35,6 +35,6 @@ class ProductController extends AbstractController
     {
         $page = $request->get('page');
 
-        return $this->json($this->productManager->getProducts($page), 200);
+        return $this->json($this->productManager->getProducts($page), 200, [], ['groups' => 'show_list_products']);
     }
 }

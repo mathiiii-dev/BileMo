@@ -43,7 +43,7 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/customer/delete/{id}", name="delete_customer", methods={"DELETE"})
+     * @Route("/customer/delete/{id}", name="delete_customer", methods={"DELETE"}, requirements={"id"="\d+"})
      *
      * @throws \Exception
      */
@@ -57,7 +57,7 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/customer/{id}", name="get_customer", methods={"GET"})
+     * @Route("/customer/{id}", name="get_customer", methods={"GET"}, requirements={"id"="\d+"})
      *
      * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
@@ -67,6 +67,7 @@ class CustomerController extends AbstractController
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
+            'groups' => 'customer',
         ]));
     }
 
@@ -77,6 +78,7 @@ class CustomerController extends AbstractController
      */
     public function getAll(Request $request): JsonResponse
     {
+        //Comment rendre les parametres obligatoires ici ?
         $id = $request->get('id');
         $page = $request->get('page');
 
@@ -84,6 +86,7 @@ class CustomerController extends AbstractController
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
+            'groups' => 'customer',
         ]));
     }
 }

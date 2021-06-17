@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -14,48 +15,57 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"show_detail_product","show_list_products"})
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"show_detail_product","show_list_products"})
      */
-    private $Product;
+    private ?string $Product;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"show_detail_product"})
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"show_detail_product","show_list_products"})
      */
-    private $stock;
+    private ?int $stock;
 
     /**
      * @ORM\Column(type="float")
+     * @Groups({"show_detail_product","show_list_products"})
      */
-    private $price;
+    private ?float $price;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"show_detail_product","show_list_products"})
      */
-    private $brand;
+    private ?string $brand;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"show_detail_product"})
      */
-    private $color;
+    private ?string $color;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Groups({"show_detail_product"})
      */
-    private $reference;
+    private ?string $reference;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"show_detail_product"})
      */
-    private $releaseDate;
+    private ?\DateTimeInterface $releaseDate;
 
     public function getId(): ?int
     {

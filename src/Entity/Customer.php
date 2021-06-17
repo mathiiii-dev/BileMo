@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -17,8 +18,9 @@ class Customer
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"customer"})
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -28,8 +30,9 @@ class Customer
      *      minMessage = "Le pseudo ne peut pas faire moins de {{ limit }} caractères",
      *      maxMessage = "Le pseudo ne peut pas faire plus de {{ limit }} caractères"
      * )
+     * @Groups({"customer"})
      */
-    private $username;
+    private ?string $username;
 
     /**
      * @ORM\Column(type="string", length=150)
@@ -42,8 +45,9 @@ class Customer
      * @Assert\Email(
      *     message = "The email {{ value }} is not a valid email."
      * )
+     * @Groups({"customer"})
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\Column(type="string", length=20)
@@ -51,14 +55,16 @@ class Customer
      *     pattern="/^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$/",
      *     message="Phone format is incorrect."
      * )
+     * @Groups({"customer"})
      */
-    private $telephone;
+    private ?string $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"customer"})
      */
-    private $client;
+    private User $client;
 
     public function getId(): ?int
     {
