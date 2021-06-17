@@ -3,11 +3,16 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
  */
 class User implements UserInterface
 {
@@ -19,30 +24,41 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=50, unique=true)
+     * @Assert\Length(
+     *      min = 3,
+     *      max = 50,
+     *      minMessage = "Votre pseudo ne peut pas faire moins de {{ limit }} caractères",
+     *      maxMessage = "Votre pseudo ne peut pas faire plus de {{ limit }} caractères"
+     * )
      */
-    private string $username;
+    private $username;
 
     /**
      * @ORM\Column(type="json")
      */
-    private array $roles = [];
+    private $roles = [];
 
     /**
-     * @var ?string The hashed password
-     * @ORM\Column(type="string", nullable=true)
+     * @var string The hashed password
+     * @ORM\Column(type="string")
      */
-    private ?string $password;
+    private $password;
 
     /**
-     * @ORM\Column(type="string", length=200, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
-    private ?string $email;
+    private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="client")
      */
-    private ?string $github_id;
+    private $customers;
+
+    public function __construct()
+    {
+        $this->customers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -56,7 +72,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -88,12 +104,12 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword(?string $password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 
@@ -125,21 +141,39 @@ class User implements UserInterface
         return $this->email;
     }
 
-    public function setEmail(?string $email): self
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getGithubId(): ?string
+    /**
+     * @return Collection|Customer[]
+     */
+    public function getCustomers(): Collection
     {
-        return $this->github_id;
+        return $this->customers;
     }
 
-    public function setGithubId(?string $github_id): self
+    public function addCustomer(Customer $customer): self
     {
-        $this->github_id = $github_id;
+        if (!$this->customers->contains($customer)) {
+            $this->customers[] = $customer;
+            $customer->setClient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCustomer(Customer $customer): self
+    {
+        if ($this->customers->removeElement($customer)) {
+            // set the owning side to null (unless already changed)
+            if ($customer->getClient() === $this) {
+                $customer->setClient(null);
+            }
+        }
 
         return $this;
     }
