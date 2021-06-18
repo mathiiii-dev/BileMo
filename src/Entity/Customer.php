@@ -11,7 +11,7 @@ use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
- * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
+ * @UniqueEntity(fields={"username"}, message="The username already exist")
  * @OA\Schema()
  */
 class Customer
@@ -30,8 +30,8 @@ class Customer
      * @Assert\Length(
      *      min = 3,
      *      max = 50,
-     *      minMessage = "Le pseudo ne peut pas faire moins de {{ limit }} caractères",
-     *      maxMessage = "Le pseudo ne peut pas faire plus de {{ limit }} caractères"
+     *      minMessage = "The username can't be less than {{ limit }} characters",
+     *      maxMessage = "The username can't exced {{ limit }} characters"
      * )
      * @Groups({"customer"})
      * @OA\Property(type="string")
@@ -43,8 +43,8 @@ class Customer
      * @Assert\Length(
      *      min = 5,
      *      max = 150,
-     *      minMessage = "L'email ne peut pas faire moins de {{ limit }} caractères",
-     *      maxMessage = "L'email ne peut pas faire plus de {{ limit }} caractères"
+     *      minMessage = "The mail can't be less than {{ limit }} characters",
+     *      maxMessage = "The username can't exced {{ limit }} characters"
      * )
      * @Assert\Email(
      *     message = "The email {{ value }} is not a valid email."
@@ -69,6 +69,7 @@ class Customer
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="customers")
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"customer"})
+     * @OA\Property(type="object", ref="#/components/schemas/User")
      */
     private User $client;
 

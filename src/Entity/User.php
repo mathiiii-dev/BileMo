@@ -24,8 +24,9 @@ class User implements UserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"customer"})
+     * @OA\Property(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
@@ -36,26 +37,29 @@ class User implements UserInterface
      *      maxMessage = "Votre pseudo ne peut pas faire plus de {{ limit }} caractères"
      * )
      * @Groups({"customer"})
+     * @OA\Property(type="string")
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="json")
      * @Groups({"customer"})
+     * @OA\Property(type="object")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"customer"})
+     * @OA\Property(type="string")
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="client")

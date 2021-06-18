@@ -25,6 +25,7 @@ class ProductController extends AbstractController
      * @Route("/product/{id}", name="get_product", methods={"GET"}, requirements={"id"="\d+"})
      * @OA\Get(
      *     path="/product/{id}",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *      name="id",
      *      in="path",
@@ -36,7 +37,12 @@ class ProductController extends AbstractController
      *      response="200",
      *      description="Product detail",
      *     @OA\JsonContent(ref="#/components/schemas/Product")
-     * )
+     * ),
+     *     @OA\Response(
+     *      response="404",
+     *      description="Product not found",
+     *     @OA\JsonContent(example="The product hasn't been found")
+     * ),
      * )
      */
     public function product(int $id): JsonResponse
@@ -48,6 +54,7 @@ class ProductController extends AbstractController
      * @Route("/products", name="get_products", methods={"GET"})
      * @OA\Get(
      *     path="/products",
+     *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *      name="page",
      *      in="query",
@@ -59,7 +66,12 @@ class ProductController extends AbstractController
      *      response="200",
      *      description="Products list",
      *     @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Product"))
-     * )
+     * ),
+     *     @OA\Response(
+     *      response="404",
+     *      description="Products not found",
+     *     @OA\JsonContent(example="No products have been found")
+     * ),
      * )
      */
     public function products(Request $request): JsonResponse

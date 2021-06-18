@@ -1,5 +1,15 @@
 {
     "openapi": "3.0.0",
+    "info": {
+        "title": "Bilemo API",
+        "version": "0.3"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api",
+            "description": "An API built with symfony"
+        }
+    ],
     "paths": {
         "/customer/add": {
             "post": {
@@ -17,10 +27,15 @@
                             }
                         }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/customer/delete{id}": {
+        "/customer/delete/{id}": {
             "delete": {
                 "operationId": "App\\Controller\\CustomerController::delete",
                 "parameters": [
@@ -40,8 +55,31 @@
                                 "example": "The customer has been deleted"
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The customer hasn't been found"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Customer owner right",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "You can't delete this customer"
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/customer/{id}": {
@@ -65,8 +103,22 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The customer hasn't been found"
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/customers": {
@@ -99,8 +151,22 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The client hasn't been found"
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/product/{id}": {
@@ -124,8 +190,22 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The product hasn't been found"
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/products": {
@@ -152,8 +232,22 @@
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Products not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "No products have been found"
+                            }
+                        }
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/sign-in": {
@@ -169,6 +263,24 @@
                             "application/json": {
                                 "schema": {},
                                 "example": "Client1 has been registered"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login_check": {
+            "post": {
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/login"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login a client",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MjQwMjIwMTEsImV4cCI6MTYyNDAyMjkxMSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoieHphdmllcjA4In0.Ur_Oij3ilkTzAqsZFqRXrD5wxZgfoAfvK0NY4kqNc5Ca0OUDh7GTZZ7zoqxV6QUe9lbPTCVO9BVLpxb_iQcOA_uJq5-zyeIYmdrTi60ZiVCZ0rP1RWAraPxfv0vNidp7roplHvOxy9ujTJ1DtLJfXM7t8avxfDBznJmcdn0wQOxet201SiHzyHIlmT8_dMHtsR1XpLg3Dxl35xpMAkoSqDzxKLCrVnY8w9Qsv--WDQ9uG8S5hZoKEbkADjnQXFLWQAOdPEGrTLQqlqjScvM12Opdth5JIjaLP9MIJcxB8JiRh8gZYKcsV0kFe3uu-XPIfxQqDw6Yv20J473X5HPpfw"
                             }
                         }
                     }
@@ -191,6 +303,9 @@
                     },
                     "telephone": {
                         "type": "string"
+                    },
+                    "client": {
+                        "$ref": "#/components/schemas/User"
                     }
                 },
                 "type": "object"
@@ -228,7 +343,23 @@
                 },
                 "type": "object"
             },
-            "User": {}
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "roles": {
+                        "type": "object"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
         },
         "requestBodies": {
             "customerAdd": {
@@ -253,6 +384,28 @@
                                     "type": "string"
                                 },
                                 "email": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "login": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "username",
+                                "password"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
                                     "type": "string"
                                 }
                             },
@@ -286,6 +439,14 @@
                         }
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
             }
         }
     }
