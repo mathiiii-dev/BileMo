@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Manager\ProductManager;
 use App\Repository\ProductRepository;
+use App\Service\CacheService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
 
@@ -14,11 +16,14 @@ class ProductController extends AbstractController
 {
     private ProductRepository $productRepository;
     private ProductManager $productManager;
+    private CacheService $cacheService;
 
-    public function __construct(ProductRepository $productRepository, ProductManager $productManager)
+
+    public function __construct(ProductRepository $productRepository, ProductManager $productManager, CacheService $cacheService)
     {
         $this->productRepository = $productRepository;
         $this->productManager = $productManager;
+        $this->cacheService = $cacheService;
     }
 
     /**
@@ -45,9 +50,9 @@ class ProductController extends AbstractController
      * ),
      * )
      */
-    public function product(int $id): JsonResponse
+    public function product(int $id): Response
     {
-        return $this->json($this->productManager->getProduct($id), 200, [], ['groups' => 'show_detail_product']);
+        return $this->cacheService->cache($this->json($this->productManager->getProduct($id), 200, [], ['groups' => 'show_detail_product']));
     }
 
     /**
@@ -74,10 +79,10 @@ class ProductController extends AbstractController
      * ),
      * )
      */
-    public function products(Request $request): JsonResponse
+    public function products(Request $request): Response
     {
         $page = $request->get('page');
 
-        return $this->json($this->productManager->getProducts($page), 200, [], ['groups' => 'show_list_products']);
+        return $this->cacheService->cache($this->json($this->productManager->getProducts($page), 200, [], ['groups' => 'show_list_products']));
     }
 }

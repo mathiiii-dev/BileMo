@@ -4,11 +4,15 @@ namespace App\Controller;
 
 use App\Handler\CustomerHandler;
 use App\Manager\CustomerManager;
+use App\Service\CacheService;
 use OpenApi\Annotations as OA;
+use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -18,17 +22,20 @@ class CustomerController extends AbstractController
     private CustomerHandler $customerHandler;
     private CustomerManager $customerManager;
     private NormalizerInterface $normalizer;
+    private CacheService $cacheService;
 
     public function __construct(
         SerializerInterface $serializer,
         CustomerManager $customerManager,
         NormalizerInterface $normalizer,
-        CustomerHandler $customerHandler
+        CustomerHandler $customerHandler,
+        CacheService $cacheService
     ) {
         $this->serializer = $serializer;
         $this->customerHandler = $customerHandler;
         $this->customerManager = $customerManager;
         $this->normalizer = $normalizer;
+        $this->cacheService = $cacheService;
     }
 
     /**
@@ -117,16 +124,16 @@ class CustomerController extends AbstractController
      * )
      * )
      *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
-    public function getOne(int $id): JsonResponse
+    public function getOne(int $id): Response
     {
-        return $this->json($this->normalizer->normalize($this->customerManager->getCustomerById($id), null, [
+        return $this->cacheService->cache($this->json($this->normalizer->normalize($this->customerManager->getCustomerById($id), null, [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
             'groups' => 'customer',
-        ]));
+        ])));
     }
 
     /**
@@ -160,19 +167,18 @@ class CustomerController extends AbstractController
      * ),
      * )
      *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
-    public function getAll(Request $request): JsonResponse
+    public function getAll(Request $request): Response
     {
-        //Comment rendre les parametres obligatoires ici ?
         $id = $request->get('id');
         $page = $request->get('page');
 
-        return $this->json($this->normalizer->normalize($this->customerManager->getAllCustomerByClient($id, $page), null, [
+        return $this->cacheService->cache($this->json($this->normalizer->normalize($this->customerManager->getAllCustomerByClient($id, $page), null, [
             'circular_reference_handler' => function ($object) {
                 return $object->getId();
             },
             'groups' => 'customer',
-        ]));
+        ])));
     }
 }
