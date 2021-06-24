@@ -13,7 +13,7 @@
     "paths": {
         "/customer/add": {
             "post": {
-                "operationId": "App\\Controller\\CustomerController::add",
+                "operationId": "227808ef658e3af3b2a14684132e64ac",
                 "requestBody": {
                     "$ref": "#/components/requestBodies/customerAdd"
                 },
@@ -37,7 +37,7 @@
         },
         "/customer/delete/{id}": {
             "delete": {
-                "operationId": "App\\Controller\\CustomerController::delete",
+                "operationId": "f32a144fec58e69daaab237923b77f29",
                 "parameters": [
                     {
                         "name": "id",
@@ -84,7 +84,7 @@
         },
         "/customer/{id}": {
             "get": {
-                "operationId": "App\\Controller\\CustomerController::getOne",
+                "operationId": "001ad1f7b069e8a003f0987b06b4894c",
                 "parameters": [
                     {
                         "name": "id",
@@ -123,7 +123,7 @@
         },
         "/customers": {
             "get": {
-                "operationId": "App\\Controller\\CustomerController::getAll",
+                "operationId": "66f4efdabeb4071193ab310e61b04b61",
                 "parameters": [
                     {
                         "name": "id",
@@ -171,7 +171,7 @@
         },
         "/product/{id}": {
             "get": {
-                "operationId": "App\\Controller\\ProductController::product",
+                "operationId": "6cab3bfafc6b9e76713a48c7cc0f5a7d",
                 "parameters": [
                     {
                         "name": "id",
@@ -210,7 +210,7 @@
         },
         "/products": {
             "get": {
-                "operationId": "App\\Controller\\ProductController::products",
+                "operationId": "ba6cad8985e233a8e7fa2469144686aa",
                 "parameters": [
                     {
                         "name": "page",
@@ -252,7 +252,7 @@
         },
         "/sign-in": {
             "post": {
-                "operationId": "App\\Controller\\SecurityController::signIn",
+                "operationId": "f90f4e009c1e176b63079b96c898b556",
                 "requestBody": {
                     "$ref": "#/components/requestBodies/signin"
                 },
@@ -271,12 +271,13 @@
         },
         "/login_check": {
             "post": {
+                "operationId": "f126fb1d49fba80a0f7ded26157e2d91",
                 "requestBody": {
                     "$ref": "#/components/requestBodies/login"
                 },
                 "responses": {
                     "200": {
-                        "description": "Login a client",
+                        "description": "Login",
                         "content": {
                             "application/json": {
                                 "schema": {},

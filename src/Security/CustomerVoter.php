@@ -43,7 +43,7 @@ class CustomerVoter extends Voter
      */
     private function canDelete(Customer $customer, User $user): bool
     {
-        if ($customer->getClient() !== $user->getId()) {
+        if ($customer->getClient()->getId() !== $user->getId()) {
             throw new \Exception("You can't delete this customer");
         }
 
