@@ -2,24 +2,24 @@
 
 namespace App\Tests;
 
-use App\Entity\Customer;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
 
-class CustomerTest extends KernelTestCase
+class UserTest extends KernelTestCase
 {
-    public function getEntity(): Customer
+    public function getEntity(): User
     {
-        return (new Customer())
+        return (new User())
             ->setUsername('UsernameTest')
             ->setEmail('email@mail.com')
-            ->setTelephone('0695740965');
+            ->setPassword('password');
     }
 
-    public function assertHasErrors(Customer $customer, int $number = 0)
+    public function assertHasErrors(User $user, int $number = 0)
     {
         self::bootKernel();
-        $errors = self::$container->get('validator')->validate($customer);
+        $errors = self::$container->get('validator')->validate($user);
         $messages = [];
         /** @var ConstraintViolation $error */
         foreach ($errors as $error) {
@@ -36,7 +36,6 @@ class CustomerTest extends KernelTestCase
     public function testInvalidEntity()
     {
         $this->assertHasErrors($this->getEntity()->setUsername('a'), 1);
-        $this->assertHasErrors($this->getEntity()->setEmail('a'), 2);
-        $this->assertHasErrors($this->getEntity()->setTelephone(695740965), 1);
     }
+
 }

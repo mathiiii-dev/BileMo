@@ -50,7 +50,9 @@ class ProductController extends AbstractController
      */
     public function product(int $id): Response
     {
-        return $this->cacheService->cache($this->json($this->productManager->getProduct($id), 200, [], ['groups' => 'show_detail_product']));
+        return $this->cacheService->cache(
+            $this->json($this->productManager->getProduct($id), 200, [], ['groups' => 'show_detail_product'])
+        );
     }
 
     /**
