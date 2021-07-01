@@ -9,13 +9,14 @@ use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
  * @OA\Schema()
+ * @Serializer\ExclusionPolicy("all")
  */
 class User implements UserInterface
 {
@@ -23,8 +24,9 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"customer"})
+     * @Serializer\Groups({"customer"})
      * @OA\Property(type="integer")
+     * @Serializer\Expose
      */
     private ?int $id;
 
@@ -36,14 +38,16 @@ class User implements UserInterface
      *      minMessage = "Votre pseudo ne peut pas faire moins de {{ limit }} caractères",
      *      maxMessage = "Votre pseudo ne peut pas faire plus de {{ limit }} caractères"
      * )
-     * @Groups({"customer"})
+     * @Serializer\Expose
+     * @Serializer\Groups({"customer"})
      * @OA\Property(type="string")
      */
     private string $username;
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"customer"})
+     * @Serializer\Groups({"customer"})
+     * @Serializer\Expose
      * @OA\Property(type="object")
      */
     private array $roles = [];
@@ -56,7 +60,8 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"customer"})
+     * @Serializer\Groups({"customer"})
+     * @Serializer\Expose
      * @OA\Property(type="string")
      */
     private ?string $email;

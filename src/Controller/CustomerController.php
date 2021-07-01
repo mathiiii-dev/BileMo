@@ -5,37 +5,32 @@ namespace App\Controller;
 use App\Handler\CustomerHandler;
 use App\Manager\CustomerManager;
 use App\Service\CacheService;
+use App\Service\ResponseService;
+use Exception;
 use OpenApi\Annotations as OA;
-use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class CustomerController extends AbstractController
 {
-    private SerializerInterface $serializer;
     private CustomerHandler $customerHandler;
     private CustomerManager $customerManager;
-    private NormalizerInterface $normalizer;
     private CacheService $cacheService;
+    private ResponseService $response;
 
     public function __construct(
-        SerializerInterface $serializer,
         CustomerManager $customerManager,
-        NormalizerInterface $normalizer,
         CustomerHandler $customerHandler,
-        CacheService $cacheService
+        CacheService $cacheService,
+        ResponseService $response
     ) {
-        $this->serializer = $serializer;
         $this->customerHandler = $customerHandler;
         $this->customerManager = $customerManager;
-        $this->normalizer = $normalizer;
         $this->cacheService = $cacheService;
+        $this->response = $response;
     }
 
     /**
@@ -51,7 +46,7 @@ class CustomerController extends AbstractController
      * )
      * )
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function add(Request $request): JsonResponse
     {
@@ -89,7 +84,7 @@ class CustomerController extends AbstractController
      * ),
      * )
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function delete(int $id): JsonResponse
     {
@@ -123,17 +118,12 @@ class CustomerController extends AbstractController
      *     @OA\JsonContent(example="The customer hasn't been found")
      * )
      * )
-     *
-     * @throws ExceptionInterface
      */
     public function getOne(int $id): Response
     {
-        return $this->cacheService->cache($this->json($this->normalizer->normalize($this->customerManager->getCustomerById($id), null, [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            },
-            'groups' => 'customer',
-        ])));
+        return $this->cacheService->cache(
+            $this->response->setUpResponse($this->customerManager->getCustomerById($id), 'customer')
+        );
     }
 
     /**
@@ -167,18 +157,14 @@ class CustomerController extends AbstractController
      * ),
      * )
      *
-     * @throws ExceptionInterface
      */
     public function getAll(Request $request): Response
     {
         $id = $request->get('id');
         $page = $request->get('page');
 
-        return $this->cacheService->cache($this->json($this->normalizer->normalize($this->customerManager->getAllCustomerByClient($id, $page), null, [
-            'circular_reference_handler' => function ($object) {
-                return $object->getId();
-            },
-            'groups' => 'customer',
-        ])));
+        return $this->cacheService->cache(
+            $this->response->setUpResponse($this->customerManager->getAllCustomerByClient($id, $page), 'customer')
+        );
     }
 }

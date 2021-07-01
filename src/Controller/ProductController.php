@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Manager\ProductManager;
-use App\Repository\ProductRepository;
 use App\Service\CacheService;
+use App\Service\ResponseService;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,15 +13,18 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductController extends AbstractController
 {
-    private ProductRepository $productRepository;
     private ProductManager $productManager;
     private CacheService $cacheService;
+    private ResponseService $response;
 
-    public function __construct(ProductRepository $productRepository, ProductManager $productManager, CacheService $cacheService)
-    {
-        $this->productRepository = $productRepository;
+    public function __construct(
+        ProductManager $productManager,
+        CacheService $cacheService,
+        ResponseService $response
+    ) {
         $this->productManager = $productManager;
         $this->cacheService = $cacheService;
+        $this->response = $response;
     }
 
     /**
@@ -51,7 +54,7 @@ class ProductController extends AbstractController
     public function product(int $id): Response
     {
         return $this->cacheService->cache(
-            $this->json($this->productManager->getProduct($id), 200, [], ['groups' => 'show_detail_product'])
+            $this->response->setUpResponse($this->productManager->getProduct($id), 'show_detail_product')
         );
     }
 
@@ -83,6 +86,8 @@ class ProductController extends AbstractController
     {
         $page = $request->get('page');
 
-        return $this->cacheService->cache($this->json($this->productManager->getProducts($page), 200, [], ['groups' => 'show_list_products']));
+        return $this->cacheService->cache(
+            $this->response->setUpResponse($this->productManager->getProducts($page), 'show_list_products')
+        );
     }
 }
