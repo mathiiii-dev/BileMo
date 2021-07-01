@@ -1,22 +1,23 @@
 <?php
 
-namespace App\DTO;
+namespace App\ApiInfo;
 
 use OpenApi\Annotations as OA;
 
 /**
  * @OA\RequestBody(
- *     request="signin",
+ *     request="customerAdd",
  *     required=true,
  *     @OA\JsonContent(
- *      required={"username", "password", "email"},
+ *      required={"username", "password", "telephone", "email"},
  *      @OA\Property(type="string", property="username"),
  *      @OA\Property(type="string", property="password"),
+ *      @OA\Property(type="string", property="telephone"),
  *      @OA\Property(type="string", property="email"),
  * )
  * )
  */
-class SignInData
+class CustomerAddData
 {
 
 }

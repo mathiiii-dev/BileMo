@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTO;
+namespace App\ApiInfo;
 
 use OpenApi\Annotations as OA;
 
