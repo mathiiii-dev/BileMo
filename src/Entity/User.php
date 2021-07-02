@@ -67,6 +67,7 @@ class User implements UserInterface
      * @Serializer\Expose
      * @OA\Property(type="string")
      * @Assert\NotBlank(message="The field email are missing.")
+     * @Assert\Email(message="This value is not a valid email address.")
      */
     private ?string $email;
 

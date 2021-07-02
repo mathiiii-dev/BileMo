@@ -12,7 +12,7 @@ class CustomerTest extends KernelTestCase
     {
         return (new Customer())
             ->setUsername('UsernameTest')
-            ->setEmail('email@mail.com')
+            ->setEmail('test@mail.com')
             ->setTelephone('0695740965');
     }
 

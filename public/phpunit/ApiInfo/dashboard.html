@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Dashboard for S:\laragon\www\BileMo\src\Service</title>
+  <title>Dashboard for S:\laragon\www\BileMo\src\ApiInfo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../_css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="../_css/nv.d3.min.css" rel="stylesheet" type="text/css">
@@ -17,7 +17,7 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../index.html">S:\laragon\www\BileMo\src</a></li>
-         <li class="breadcrumb-item"><a href="index.html">Service</a></li>
+         <li class="breadcrumb-item"><a href="index.html">ApiInfo</a></li>
          <li class="breadcrumb-item active">(Dashboard)</li>
 
        </ol>
@@ -58,11 +58,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="CacheService.php.html#7">App\Service\CacheService</a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="PaginationService.php.html#5">App\Service\PaginationService</a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="PasswordCheckService.php.html#5">App\Service\PasswordCheckService</a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="ResponseService.php.html#9">App\Service\ResponseService</a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="ValidatorService.php.html#7">App\Service\ValidatorService</a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -79,8 +74,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="ValidatorService.php.html#7">App\Service\ValidatorService</a></td><td class="text-right">12</td></tr>
-       <tr><td><a href="PasswordCheckService.php.html#5">App\Service\PasswordCheckService</a></td><td class="text-right">6</td></tr>
 
        </tbody>
       </table>
@@ -118,13 +111,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="CacheService.php.html#10"><abbr title="App\Service\CacheService::cache">cache</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="PaginationService.php.html#7"><abbr title="App\Service\PaginationService::getPagination">getPagination</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="PasswordCheckService.php.html#10"><abbr title="App\Service\PasswordCheckService::checkPassword">checkPassword</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="ResponseService.php.html#13"><abbr title="App\Service\ResponseService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="ResponseService.php.html#18"><abbr title="App\Service\ResponseService::setUpResponse">setUpResponse</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="ValidatorService.php.html#11"><abbr title="App\Service\ValidatorService::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
-       <tr><td><a href="ValidatorService.php.html#19"><abbr title="App\Service\ValidatorService::validator">validator</abbr></a></td><td class="text-right">0%</td></tr>
 
        </tbody>
       </table>
@@ -141,8 +127,6 @@
         </tr>
        </thead>
        <tbody>
-       <tr><td><a href="PasswordCheckService.php.html#10"><abbr title="App\Service\PasswordCheckService::checkPassword">checkPassword</abbr></a></td><td class="text-right">6</td></tr>
-       <tr><td><a href="ValidatorService.php.html#19"><abbr title="App\Service\ValidatorService::validator">validator</abbr></a></td><td class="text-right">6</td></tr>
 
        </tbody>
       </table>
@@ -171,7 +155,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#classCoverageDistribution svg')
-      .datum(getCoverageDistributionData([5,0,0,0,0,0,0,0,0,0,0,0], "Class Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,5], "Class Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -189,7 +173,7 @@ $(document).ready(function() {
       .yAxis.tickFormat(d3.format('d'));
 
     d3.select('#methodCoverageDistribution svg')
-      .datum(getCoverageDistributionData([7,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
+      .datum(getCoverageDistributionData([0,0,0,0,0,0,0,0,0,0,0,0], "Method Coverage"))
       .transition().duration(500).call(chart);
 
     nv.utils.windowResize(chart.update);
@@ -239,7 +223,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Cyclomatic Complexity');
 
     d3.select('#classComplexity svg')
-      .datum(getComplexityData([[0,1,"<a href=\"CacheService.php.html#7\">App\\Service\\CacheService<\/a>"],[0,1,"<a href=\"PaginationService.php.html#5\">App\\Service\\PaginationService<\/a>"],[0,2,"<a href=\"PasswordCheckService.php.html#5\">App\\Service\\PasswordCheckService<\/a>"],[0,2,"<a href=\"ResponseService.php.html#9\">App\\Service\\ResponseService<\/a>"],[0,3,"<a href=\"ValidatorService.php.html#7\">App\\Service\\ValidatorService<\/a>"]], 'Class Complexity'))
+      .datum(getComplexityData([[100,0,"<a href=\"ApiInfo.php.html#14\">App\\ApiInfo\\ApiInfo<\/a>"],[100,0,"<a href=\"CustomerAddData.php.html#20\">App\\ApiInfo\\CustomerAddData<\/a>"],[100,0,"<a href=\"LoginData.php.html#16\">App\\ApiInfo\\LoginData<\/a>"],[100,0,"<a href=\"SecuritySchemes.php.html#16\">App\\ApiInfo\\SecuritySchemes<\/a>"],[100,0,"<a href=\"SignInData.php.html#19\">App\\ApiInfo\\SignInData<\/a>"]], 'Class Complexity'))
       .transition()
       .duration(500)
       .call(chart);
@@ -263,7 +247,7 @@ $(document).ready(function() {
     chart.yAxis.axisLabel('Method Complexity');
 
     d3.select('#methodComplexity svg')
-      .datum(getComplexityData([[0,1,"<a href=\"CacheService.php.html#10\">App\\Service\\CacheService::cache<\/a>"],[0,1,"<a href=\"PaginationService.php.html#7\">App\\Service\\PaginationService::getPagination<\/a>"],[0,2,"<a href=\"PasswordCheckService.php.html#10\">App\\Service\\PasswordCheckService::checkPassword<\/a>"],[0,1,"<a href=\"ResponseService.php.html#13\">App\\Service\\ResponseService::__construct<\/a>"],[0,1,"<a href=\"ResponseService.php.html#18\">App\\Service\\ResponseService::setUpResponse<\/a>"],[0,1,"<a href=\"ValidatorService.php.html#11\">App\\Service\\ValidatorService::__construct<\/a>"],[0,2,"<a href=\"ValidatorService.php.html#19\">App\\Service\\ValidatorService::validator<\/a>"]], 'Method Complexity'))
+      .datum(getComplexityData([], 'Method Complexity'))
       .transition()
       .duration(500)
       .call(chart);

@@ -12,7 +12,7 @@ class UserTest extends KernelTestCase
     {
         return (new User())
             ->setUsername('UsernameTest')
-            ->setEmail('email@mail.com')
+            ->setEmail('test@mail.com')
             ->setPassword('password');
     }
 
@@ -36,6 +36,8 @@ class UserTest extends KernelTestCase
     public function testInvalidEntity()
     {
         $this->assertHasErrors($this->getEntity()->setUsername('a'), 1);
+        $this->assertHasErrors($this->getEntity()->setEmail('a'), 1);
+        $this->assertHasErrors($this->getEntity()->setPassword(''), 1);
     }
 
 }
