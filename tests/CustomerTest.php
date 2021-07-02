@@ -31,6 +31,9 @@ class CustomerTest extends KernelTestCase
     public function testValidEntity()
     {
         $this->assertHasErrors($this->getEntity(), 0);
+        $this->assertEquals('UsernameTest', $this->getEntity()->getUserName());
+        $this->assertEquals('test@mail.com', $this->getEntity()->getEmail());
+        $this->assertEquals('0695740965', $this->getEntity()->getTelephone());
     }
 
     public function testInvalidEntity()

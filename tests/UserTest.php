@@ -31,6 +31,9 @@ class UserTest extends KernelTestCase
     public function testValidEntity()
     {
         $this->assertHasErrors($this->getEntity(), 0);
+        $this->assertEquals('UsernameTest', $this->getEntity()->getUserName());
+        $this->assertEquals('test@mail.com', $this->getEntity()->getEmail());
+        $this->assertEquals('password', $this->getEntity()->getPassword());
     }
 
     public function testInvalidEntity()
@@ -39,5 +42,4 @@ class UserTest extends KernelTestCase
         $this->assertHasErrors($this->getEntity()->setEmail('a'), 1);
         $this->assertHasErrors($this->getEntity()->setPassword(''), 1);
     }
-
 }
