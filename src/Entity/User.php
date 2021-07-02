@@ -14,7 +14,8 @@ use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
+ * @UniqueEntity(fields={"username"}, message="This pseudo is already used")
+ * @UniqueEntity(fields={"email"}, message="This email is already used")
  * @OA\Schema()
  * @Serializer\ExclusionPolicy("all")
  */
@@ -41,6 +42,7 @@ class User implements UserInterface
      * @Serializer\Expose
      * @Serializer\Groups({"customer"})
      * @OA\Property(type="string")
+     * @Assert\NotBlank(message="The field username are missing.")
      */
     private string $username;
 
@@ -55,6 +57,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="The field password are missing.")
      */
     private string $password;
 
@@ -63,6 +66,7 @@ class User implements UserInterface
      * @Serializer\Groups({"customer"})
      * @Serializer\Expose
      * @OA\Property(type="string")
+     * @Assert\NotBlank(message="The field email are missing.")
      */
     private ?string $email;
 

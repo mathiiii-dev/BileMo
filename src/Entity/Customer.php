@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=CustomerRepository::class)
  * @UniqueEntity(fields={"username"}, message="The username already exist")
+ * @UniqueEntity(fields={"email"}, message="The email already exist")
  * @OA\Schema()
  * @Hateoas\Relation(
  *      "self",
