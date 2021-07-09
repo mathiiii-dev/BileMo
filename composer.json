@@ -67,6 +67,7 @@
             "@auto-scripts"
         ],
         "compile": [
+            "composer require doctrine/doctrine-fixtures-bundle",
             "php bin/console doctrine:fixtures:load"
         ]
     },
