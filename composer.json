@@ -66,8 +66,7 @@
             "@auto-scripts"
         ],
         "compile": [
-            "composer require doctrine/doctrine-fixtures-bundle --env=prod",
-            "php bin/console doctrine:fixtures:load"
+            "php bin/console doctrine:fixtures:load --env=prod"
         ]
     },
     "conflict": {
