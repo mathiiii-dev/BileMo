@@ -6,13 +6,18 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use OpenApi\Annotations as OA;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"username"}, message="Ce pseudo est déjà utilisé")
+ * @UniqueEntity(fields={"username"}, message="This pseudo is already used")
+ * @UniqueEntity(fields={"email"}, message="This email is already used")
+ * @OA\Schema()
+ * @Serializer\ExclusionPolicy("all")
  */
 class User implements UserInterface
 {
@@ -20,8 +25,11 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"customer"})
+     * @OA\Property(type="integer")
+     * @Serializer\Expose
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50, unique=true)
@@ -31,24 +39,37 @@ class User implements UserInterface
      *      minMessage = "Votre pseudo ne peut pas faire moins de {{ limit }} caractères",
      *      maxMessage = "Votre pseudo ne peut pas faire plus de {{ limit }} caractères"
      * )
+     * @Serializer\Expose
+     * @Serializer\Groups({"customer"})
+     * @OA\Property(type="string")
+     * @Assert\NotBlank(message="The field username are missing.")
      */
-    private $username;
+    private string $username;
 
     /**
      * @ORM\Column(type="json")
+     * @Serializer\Groups({"customer"})
+     * @Serializer\Expose
+     * @OA\Property(type="object")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="The field password are missing.")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Serializer\Groups({"customer"})
+     * @Serializer\Expose
+     * @OA\Property(type="string")
+     * @Assert\NotBlank(message="The field email are missing.")
+     * @Assert\Email(message="This value is not a valid email address.")
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\OneToMany(targetEntity=Customer::class, mappedBy="client")
@@ -72,7 +93,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return $this->username;
     }
 
     public function setUsername(string $username): self

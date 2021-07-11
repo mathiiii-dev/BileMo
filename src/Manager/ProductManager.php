@@ -20,10 +20,10 @@ class ProductManager
 
     public function getProduct(int $id): Product
     {
-        $product = $this->productRepository->findOneBy(["id" => $id]);
+        $product = $this->productRepository->findOneBy(['id' => $id]);
 
-        if ($product === null) {
-            throw new NotFoundHttpException("The product n°".$id." hasn't been found");
+        if (null === $product) {
+            throw new NotFoundHttpException('The product n°'.$id." hasn't been found");
         }
 
         return $product;
@@ -32,13 +32,12 @@ class ProductManager
     public function getProducts(int $page): array
     {
         $pagination = $this->pagination->getPagination($page);
-        $products = $this->productRepository->findBy([], [], $pagination["limit"], $pagination["offset"]);
+        $products = $this->productRepository->findBy([], [], $pagination['limit'], $pagination['offset']);
 
         if (empty($products)) {
-            throw new NotFoundHttpException("No products have been found", null, 404);
+            throw new NotFoundHttpException('No products have been found', null, 404);
         }
 
         return $products;
     }
-
 }

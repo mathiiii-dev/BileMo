@@ -12,12 +12,10 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CustomerFixtures extends Fixture implements DependentFixtureInterface
 {
-    private UserPasswordEncoderInterface $passwordEncoder;
     private UserRepository $userRepository;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->passwordEncoder = $passwordEncoder;
         $this->userRepository = $userRepository;
     }
 
@@ -27,12 +25,10 @@ class CustomerFixtures extends Fixture implements DependentFixtureInterface
 
         $clients = $this->userRepository->findAll();
 
-        for ($i = 0; $i < 20; $i++) {
-
+        for ($i = 0; $i < 20; ++$i) {
             $client = array_rand($clients);
             $customer = new Customer();
-            $customer->setPassword("password")
-                ->setEmail($faker::create()->email)
+            $customer->setEmail($faker::create()->email)
                 ->setUsername($faker::create()->userName)
                 ->setTelephone($faker::create()->randomNumber(9))
                 ->setClient($clients[$client]);
