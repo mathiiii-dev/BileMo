@@ -163,7 +163,7 @@ class Customer
         return $this;
     }
 
-    public function getClient()
+    public function getClient(): User
     {
         return $this->client;
     }

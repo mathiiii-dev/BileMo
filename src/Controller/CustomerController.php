@@ -50,7 +50,7 @@ class CustomerController extends AbstractController
      */
     public function add(Request $request): JsonResponse
     {
-        $customer = $this->customerHandler->createCustomerHandler($request, $this->getUser());
+        $customer = $this->customerHandler->handleCreate($request, $this->getUser());
 
         return new JsonResponse(['success' => $customer->getUsername().' has been registered'], 200);
     }
@@ -90,7 +90,7 @@ class CustomerController extends AbstractController
     {
         $customer = $this->customerManager->getCustomerById($id);
         $this->denyAccessUnlessGranted('owner', $customer);
-        $this->customerHandler->deleteCustomerHandler($customer);
+        $this->customerHandler->handleDelete($customer);
 
         return new JsonResponse(['success' => 'The customer has been deleted'], 200);
     }
@@ -156,12 +156,16 @@ class CustomerController extends AbstractController
      *     @OA\JsonContent(example="The client hasn't been found")
      * ),
      * )
-     *
+     * @throws Exception
      */
     public function getAll(Request $request): Response
     {
         $id = $request->get('id');
         $page = $request->get('page');
+
+        if (!$id || !$page) {
+            throw new Exception('Missing parameters. id and page parameters are mandatory', 400);
+        }
 
         return $this->cacheService->cache(
             $this->response->setUpResponse($this->customerManager->getAllCustomerByClient($id, $page), 'customer')

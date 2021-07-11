@@ -45,7 +45,7 @@ class SecurityController extends AbstractController
      */
     public function signIn(Request $request): Response
     {
-        $user = $this->userHandler->createUserHandler($request);
+        $user = $this->userHandler->handleCreate($request);
 
         return new JsonResponse(['success' => $user->getUsername().' has been registered'], 200);
     }

@@ -7,6 +7,7 @@ use App\Service\CacheService;
 use App\Service\ResponseService;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -85,6 +86,10 @@ class ProductController extends AbstractController
     public function products(Request $request): Response
     {
         $page = $request->get('page');
+
+        if (!$page) {
+            throw new Exception('Missing parameters. page parameter is mandatory', 400);
+        }
 
         return $this->cacheService->cache(
             $this->response->setUpResponse($this->productManager->getProducts($page), 'show_list_products')

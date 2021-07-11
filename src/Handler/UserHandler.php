@@ -35,7 +35,7 @@ class UserHandler
     /**
      * @throws \Exception
      */
-    public function createUserHandler(Request $request): User
+    public function handleCreate(Request $request): User
     {
         /** @var User $requestBody */
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');
