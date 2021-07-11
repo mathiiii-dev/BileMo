@@ -4,9 +4,33 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
+use OpenApi\Annotations as OA;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @OA\Schema()
+ *
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(
+ *          "api_get_product",
+ *          parameters = { "id" = "expr(object.getId())" },
+ *          absolute = true
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups={"show_detail_product","show_list_products"})
+ * )
+ * @Hateoas\Relation(
+ *      "get_products",
+ *      href = @Hateoas\Route(
+ *          "api_get_products",
+ *          parameters = { "page" = "1" },
+ *          absolute = true
+ *      ),
+ *     exclusion = @Hateoas\Exclusion(groups={"show_detail_product","show_list_products"})
+ * )
+ * @Serializer\ExclusionPolicy("all")
  */
 class Product
 {
@@ -14,48 +38,75 @@ class Product
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Serializer\Groups({"show_detail_product","show_list_products"})
+     * @OA\Property(type="integer")
+     * @Serializer\Expose
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Serializer\Groups({"show_detail_product","show_list_products"})
+     * @OA\Property(type="string")
+     * @Serializer\Expose
      */
-    private $Product;
+    private ?string $Product;
 
     /**
      * @ORM\Column(type="text")
+     * @Serializer\Groups({"show_detail_product"})
+     * @OA\Property(type="string")
+     * @Serializer\Expose
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="integer")
+     * @OA\Property(type="integer")
+     * @Serializer\Groups({"show_detail_product","show_list_products"})
+     * @Serializer\Expose
      */
-    private $stock;
+    private ?int $stock;
 
     /**
      * @ORM\Column(type="float")
+     * @OA\Property(type="number")
+     * @Serializer\Groups({"show_detail_product","show_list_products"})
+     * @Serializer\Expose
      */
-    private $price;
+    private ?float $price;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @OA\Property(type="string")
+     * @Serializer\Groups({"show_detail_product","show_list_products"})
+     * @Serializer\Expose
      */
-    private $brand;
+    private ?string $brand;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @OA\Property(type="string")
+     * @Serializer\Groups({"show_detail_product"})
+     * @Serializer\Expose
      */
-    private $color;
+    private ?string $color;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @OA\Property(type="string")
+     * @Serializer\Groups({"show_detail_product"})
+     * @Serializer\Expose
      */
-    private $reference;
+    private ?string $reference;
 
     /**
      * @ORM\Column(type="date")
+     * @OA\Property(type="string", format="date-time")
+     * @Serializer\Groups({"show_detail_product"})
+     * @Serializer\Expose
      */
-    private $releaseDate;
+    private ?\DateTimeInterface $releaseDate;
 
     public function getId(): ?int
     {

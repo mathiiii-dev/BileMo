@@ -1,0 +1,454 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Bilemo API",
+        "version": "0.3"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api",
+            "description": "An API built with symfony"
+        }
+    ],
+    "paths": {
+        "/customer/add": {
+            "post": {
+                "operationId": "227808ef658e3af3b2a14684132e64ac",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/customerAdd"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create a customer",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "Customer1 has been registered"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/customer/delete/{id}": {
+            "delete": {
+                "operationId": "f32a144fec58e69daaab237923b77f29",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the customer",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Delete a customer",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The customer has been deleted"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The customer hasn't been found"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Customer owner right",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "You can't delete this customer"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/customer/{id}": {
+            "get": {
+                "operationId": "001ad1f7b069e8a003f0987b06b4894c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the customer",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Customer"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The customer hasn't been found"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/customers": {
+            "get": {
+                "operationId": "66f4efdabeb4071193ab310e61b04b61",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "The id of the client",
+                        "required": true
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The index of the page",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Customer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The client hasn't been found"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "operationId": "6cab3bfafc6b9e76713a48c7cc0f5a7d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of the product",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product detail",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "The product hasn't been found"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/products": {
+            "get": {
+                "operationId": "ba6cad8985e233a8e7fa2469144686aa",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "The page index",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Products list",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Product"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Products not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "No products have been found"
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/sign-in": {
+            "post": {
+                "operationId": "f90f4e009c1e176b63079b96c898b556",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/signin"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Create a client",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "Client1 has been registered"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/login_check": {
+            "post": {
+                "operationId": "f126fb1d49fba80a0f7ded26157e2d91",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/login"
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE2MjQwMjIwMTEsImV4cCI6MTYyNDAyMjkxMSwicm9sZXMiOlsiUk9MRV9VU0VSIl0sInVzZXJuYW1lIjoieHphdmllcjA4In0.Ur_Oij3ilkTzAqsZFqRXrD5wxZgfoAfvK0NY4kqNc5Ca0OUDh7GTZZ7zoqxV6QUe9lbPTCVO9BVLpxb_iQcOA_uJq5-zyeIYmdrTi60ZiVCZ0rP1RWAraPxfv0vNidp7roplHvOxy9ujTJ1DtLJfXM7t8avxfDBznJmcdn0wQOxet201SiHzyHIlmT8_dMHtsR1XpLg3Dxl35xpMAkoSqDzxKLCrVnY8w9Qsv--WDQ9uG8S5hZoKEbkADjnQXFLWQAOdPEGrTLQqlqjScvM12Opdth5JIjaLP9MIJcxB8JiRh8gZYKcsV0kFe3uu-XPIfxQqDw6Yv20J473X5HPpfw"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Customer": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    },
+                    "client": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "Product": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "stock": {
+                        "type": "integer"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "brand": {
+                        "type": "string"
+                    },
+                    "color": {
+                        "type": "string"
+                    },
+                    "reference": {
+                        "type": "string"
+                    },
+                    "releaseDate": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "username": {
+                        "type": "string"
+                    },
+                    "roles": {
+                        "type": "object"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "requestBodies": {
+            "customerAdd": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "username",
+                                "password",
+                                "telephone",
+                                "email"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "telephone": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "login": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "username",
+                                "password"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "signin": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "username",
+                                "password",
+                                "email"
+                            ],
+                            "properties": {
+                                "username": {
+                                    "type": "string"
+                                },
+                                "password": {
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

@@ -11,8 +11,8 @@ class PaginationService
         $offset = $limit * ($currentPage - 1);
 
         return [
-            "limit" => $limit,
-            "offset" => $offset
+            'limit' => $limit,
+            'offset' => $offset,
         ];
     }
 }
