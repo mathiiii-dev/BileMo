@@ -33,12 +33,21 @@ composer install
 
 First edit .env (or .env.local) with your database credentials : 
 ```
-DATABASE_URL="mysql://root:@127.0.0.1:3306/SnowTricks?serverVersion=5.7"
+DATABASE_URL="mysql://root:@127.0.0.1:3306/bilemo?serverVersion=5.7"
 ```
 
 Create the database :
 ```
 php bin/console doctrine:create:database
+```
+
+Add table :
+```
+php bin/console make:migration
+```
+and :
+```
+php bin/console doctrine:migrations:migrate
 ```
 
 You can load some data into the database : 
@@ -48,7 +57,7 @@ php bin/console doctrine:fixtures:load
 
 ## Test account
 
-You cna test the API with those credentials : 
+You can test the API with those credentials : 
 ```
 Pseudo : Mathias
 Password : password
