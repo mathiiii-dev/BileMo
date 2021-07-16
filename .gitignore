@@ -31,3 +31,5 @@
 .env.test
 
 phpunit.xml.dist
+
+/public/phpunit

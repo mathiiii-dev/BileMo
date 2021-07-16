@@ -10,10 +10,12 @@ class PasswordCheckService
     /**
      * @throws Exception
      */
-    public function checkPassword(string $password): void
+    public function checkPassword(string $password): bool
     {
         if (strlen($password) < 8) {
             throw new BadRequestHttpException('Password too short (min. 8 character)');
         }
+
+        return true;
     }
 }
