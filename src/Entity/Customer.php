@@ -90,7 +90,7 @@ class Customer
      *      min = 5,
      *      max = 150,
      *      minMessage = "The mail can't be less than {{ limit }} characters",
-     *      maxMessage = "The username can't exced {{ limit }} characters"
+     *      maxMessage = "The mail can't exced {{ limit }} characters"
      * )
      * @Serializer\Expose
      * @Assert\Email(
@@ -99,7 +99,7 @@ class Customer
      * @OA\Property(type="string")
      * @Serializer\Groups({"customer"})
      */
-    private ?string $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="string", length=20)

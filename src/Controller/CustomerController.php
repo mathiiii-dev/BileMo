@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CustomerController extends AbstractController
@@ -156,6 +157,7 @@ class CustomerController extends AbstractController
      *     @OA\JsonContent(example="The client hasn't been found")
      * ),
      * )
+     *
      * @throws Exception
      */
     public function getAll(Request $request): Response
@@ -163,8 +165,12 @@ class CustomerController extends AbstractController
         $id = $request->get('id');
         $page = $request->get('page');
 
-        if (!$id || !$page) {
-            throw new Exception('Missing parameters. id and page parameters are mandatory', 400);
+        if (!$id) {
+            throw new BadRequestHttpException('Missing parameter. id parameter is mandatory');
+        }
+
+        if (!$page) {
+            $page = 1;
         }
 
         return $this->cacheService->cache(

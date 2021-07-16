@@ -88,7 +88,7 @@ class ProductController extends AbstractController
         $page = $request->get('page');
 
         if (!$page) {
-            throw new Exception('Missing parameters. page parameter is mandatory', 400);
+            $page = 1;
         }
 
         return $this->cacheService->cache(
