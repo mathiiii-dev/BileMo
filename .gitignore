@@ -29,3 +29,5 @@
 phpunit.xml.dist
 
 /public/phpunit
+
+/config/jwt
