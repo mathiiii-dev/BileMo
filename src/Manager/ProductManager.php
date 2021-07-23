@@ -37,6 +37,7 @@ class ProductManager
         $count = $this->entityManager->createQueryBuilder()->select('count(product.id)')->from('App:Product', 'product');
         $pagination = $this->pagination->getPagination($page, $count->getQuery()->getSingleScalarResult());
         $products = $this->productRepository->findBy([], [], $pagination['limit'], $pagination['offset']);
+        array_push($products, ['_embedded' => ['pages' => $pagination['pages']]]);
 
         if (empty($products)) {
             throw new NotFoundHttpException('No products have been found');

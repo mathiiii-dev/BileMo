@@ -48,6 +48,7 @@ class CustomerManager
         $this->userManager->getUserById($id);
         $pagination = $this->pagination->getPagination($page, $count->getQuery()->getSingleScalarResult());
         $customers = $this->customerRepository->findBy(['client' => $id], [], $pagination['limit'], $pagination['offset']);
+        array_push($customers, ['_embedded' => ['pages' => $pagination['pages']]]);
 
         if (empty($customers)) {
             throw new NotFoundHttpException('No customers have been found', null, 404);

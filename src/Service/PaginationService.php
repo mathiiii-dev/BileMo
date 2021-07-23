@@ -2,18 +2,10 @@
 
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class PaginationService
 {
-    private EntityManagerInterface $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
-
     public function getPagination(int $page, int $count): array
     {
         $currentPage = $page;
@@ -22,12 +14,13 @@ class PaginationService
         $offset = $limit * ($currentPage - 1);
 
         if ($currentPage <= 0 || $currentPage > $pages || !filter_var($page, FILTER_VALIDATE_INT)) {
-            throw new BadRequestHttpException('This page doesn\'t exist.'.' (only '.$pages.' pages)');
+            throw new BadRequestHttpException('This page doesn\'t exist.'.' (only '.$pages.' pages)', null, 400);
         }
 
         return [
             'limit' => $limit,
             'offset' => $offset,
+            'pages' => $pages,
         ];
     }
 }
