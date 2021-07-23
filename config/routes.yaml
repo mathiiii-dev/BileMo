@@ -1,4 +1,7 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+gesdinet_jwt_refresh_token:
+  path:     /api/token/refresh
+  defaults: { _controller: gesdinet.jwtrefreshtoken:refresh }
 
