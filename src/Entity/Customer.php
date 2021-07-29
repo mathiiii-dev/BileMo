@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),
- *     exclusion = @Hateoas\Exclusion(groups={"customer"})
+ *     exclusion = @Hateoas\Exclusion(groups={"customer", "customers"})
  * )
  * @Hateoas\Relation(
  *      "get_customers",
@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          parameters = { "id" = "45", "page" = "1" },
  *          absolute = true
  *      ),
- *     exclusion = @Hateoas\Exclusion(groups={"customer"})
+ *     exclusion = @Hateoas\Exclusion(groups={"customer", "customers"})
  * )
  * @Hateoas\Relation(
  *      "delete",
@@ -40,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          parameters = { "id" = "expr(object.getId())" },
  *          absolute = true
  *      ),
- *    exclusion = @Hateoas\Exclusion(groups={"customer"})
+ *    exclusion = @Hateoas\Exclusion(groups={"customer", "customers"})
  * )
  * @Hateoas\Relation(
  *      "add",
@@ -48,12 +48,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "api_add_customer",
  *          absolute = true
  *      ),
- *     exclusion = @Hateoas\Exclusion(groups={"customer"})
+ *     exclusion = @Hateoas\Exclusion(groups={"customer", "customers"})
  * )
  * @Hateoas\Relation(
  *     "client",
  *     embedded = @Hateoas\Embedded("expr(object.getClient().getId())"),
- *     exclusion = @Hateoas\Exclusion(groups={"customer"})
+ *     exclusion = @Hateoas\Exclusion(groups={"customer", "customers"})
  * )
  *
  * @Serializer\ExclusionPolicy("all")
@@ -64,7 +64,7 @@ class Customer
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Serializer\Groups({"customer"})
+     * @Serializer\Groups({"customer", "customers"})
      * @OA\Property(type="integer")
      * @Serializer\Expose
      */
@@ -78,7 +78,7 @@ class Customer
      *      minMessage = "The username can't be less than {{ limit }} characters",
      *      maxMessage = "The username can't exced {{ limit }} characters"
      * )
-     * @Serializer\Groups({"customer"})
+     * @Serializer\Groups({"customer", "customers"})
      * @OA\Property(type="string")
      * @Serializer\Expose
      */

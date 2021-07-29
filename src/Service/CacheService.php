@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CacheService
 {
-
     public function cache(Response $response): Response
     {
         $response->setPublic();
@@ -16,5 +15,4 @@ class CacheService
 
         return $response;
     }
-
 }

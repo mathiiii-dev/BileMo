@@ -26,7 +26,7 @@ class ProductManager
         $product = $this->productRepository->findOneBy(['id' => $id]);
 
         if (null === $product) {
-            throw new NotFoundHttpException('The product n°'.$id." hasn't been found");
+            throw new NotFoundHttpException('The product n°'.$id." hasn't been found", null, 404);
         }
 
         return $product;

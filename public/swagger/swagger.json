@@ -11,14 +11,14 @@
         }
     ],
     "paths": {
-        "/customer/add": {
+        "/customers/add": {
             "post": {
-                "operationId": "227808ef658e3af3b2a14684132e64ac",
+                "operationId": "5449c688c91a36163ef2b36b1dd37706",
                 "requestBody": {
                     "$ref": "#/components/requestBodies/customerAdd"
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Create a customer",
                         "content": {
                             "application/json": {
@@ -35,9 +35,9 @@
                 ]
             }
         },
-        "/customer/delete/{id}": {
+        "/customers/delete/{id}": {
             "delete": {
-                "operationId": "f32a144fec58e69daaab237923b77f29",
+                "operationId": "4e1cae32a07866add3827e6d871c8afb",
                 "parameters": [
                     {
                         "name": "id",
@@ -47,14 +47,8 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": "Delete a customer",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": "The customer has been deleted"
-                            }
-                        }
+                    "204": {
+                        "description": "Delete a customer"
                     },
                     "404": {
                         "description": "Customer not found",
@@ -82,9 +76,9 @@
                 ]
             }
         },
-        "/customer/{id}": {
+        "/customers/{id}": {
             "get": {
-                "operationId": "001ad1f7b069e8a003f0987b06b4894c",
+                "operationId": "2c968a802d399d16f3e946d8e33bbf6c",
                 "parameters": [
                     {
                         "name": "id",
@@ -169,9 +163,9 @@
                 ]
             }
         },
-        "/product/{id}": {
+        "/products/{id}": {
             "get": {
-                "operationId": "6cab3bfafc6b9e76713a48c7cc0f5a7d",
+                "operationId": "790e7acd0dec9239e26321416367c569",
                 "parameters": [
                     {
                         "name": "id",

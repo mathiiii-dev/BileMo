@@ -4,10 +4,10 @@ namespace App\Controller;
 
 use App\Manager\ProductManager;
 use App\Service\CacheService;
+use App\Service\RequestParametersCheckService;
 use App\Service\ResponseService;
 use OpenApi\Annotations as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,21 +17,24 @@ class ProductController extends AbstractController
     private ProductManager $productManager;
     private CacheService $cacheService;
     private ResponseService $response;
+    private RequestParametersCheckService $parametersCheckService;
 
     public function __construct(
         ProductManager $productManager,
         CacheService $cacheService,
-        ResponseService $response
+        ResponseService $response,
+        RequestParametersCheckService $parametersCheckService
     ) {
         $this->productManager = $productManager;
         $this->cacheService = $cacheService;
         $this->response = $response;
+        $this->parametersCheckService = $parametersCheckService;
     }
 
     /**
-     * @Route("/product/{id}", name="get_product", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/products/{id}", name="get_product", methods={"GET"}, requirements={"id"="\d+"})
      * @OA\Get(
-     *     path="/product/{id}",
+     *     path="/products/{id}",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *      name="id",
@@ -85,11 +88,7 @@ class ProductController extends AbstractController
      */
     public function products(Request $request): Response
     {
-        $page = $request->get('page');
-
-        if (!$page) {
-            $page = 1;
-        }
+        $page = $this->parametersCheckService->checkParamsProducts($request);
 
         return $this->cacheService->cache(
             $this->response->setUpResponse($this->productManager->getProducts($page), 'show_list_products')
