@@ -5,6 +5,7 @@ namespace App\Tests;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\Validation;
 
 class UserTest extends KernelTestCase
 {

@@ -4,6 +4,8 @@ namespace App\Security;
 
 use App\Entity\Customer;
 use App\Entity\User;
+use Exception;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -25,7 +27,7 @@ class CustomerVoter extends Voter
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
@@ -39,12 +41,12 @@ class CustomerVoter extends Voter
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     private function canDelete(Customer $customer, User $user): bool
     {
         if ($customer->getClient()->getId() !== $user->getId()) {
-            throw new \Exception("You can't delete this customer");
+            throw new AccessDeniedHttpException("You can't delete this customer");
         }
 
         return true;

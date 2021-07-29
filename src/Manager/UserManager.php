@@ -28,17 +28,6 @@ class UserManager
         $this->userRepository = $userRepository;
     }
 
-    public function getUserByUsername(string $username): ?User
-    {
-        $user = $this->userRepository->findOneBy(['username' => $username]);
-
-        if (!$user) {
-            throw new NotFoundHttpException("The client haven't been found");
-        }
-
-        return $user;
-    }
-
     public function getUserById(int $id): ?User
     {
         $user = $this->userRepository->findOneBy(['id' => $id]);
