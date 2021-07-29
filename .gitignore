@@ -9,10 +9,6 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
-###< lexik/jwt-authentication-bundle ###
-
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
@@ -31,3 +27,7 @@
 .env.test
 
 phpunit.xml.dist
+
+/public/phpunit
+
+/config/jwt

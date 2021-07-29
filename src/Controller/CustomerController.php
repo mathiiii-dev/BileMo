@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Handler\CustomerHandler;
 use App\Manager\CustomerManager;
 use App\Service\CacheService;
+use App\Service\RequestParametersCheckService;
 use App\Service\ResponseService;
 use Exception;
 use OpenApi\Annotations as OA;
@@ -20,27 +21,30 @@ class CustomerController extends AbstractController
     private CustomerManager $customerManager;
     private CacheService $cacheService;
     private ResponseService $response;
+    private RequestParametersCheckService $paramsCheckService;
 
     public function __construct(
         CustomerManager $customerManager,
         CustomerHandler $customerHandler,
         CacheService $cacheService,
-        ResponseService $response
+        ResponseService $response,
+        RequestParametersCheckService $paramsCheckService
     ) {
         $this->customerHandler = $customerHandler;
         $this->customerManager = $customerManager;
         $this->cacheService = $cacheService;
         $this->response = $response;
+        $this->paramsCheckService = $paramsCheckService;
     }
 
     /**
-     * @Route("/customer/add", name="add_customer", methods={"POST"})
+     * @Route("/customers/add", name="add_customer", methods={"POST"})
      * @OA\Post(
-     *     path="/customer/add",
+     *     path="/customers/add",
      *     security={{"bearerAuth":{}}},
      *     @OA\RequestBody(ref="#/components/requestBodies/customerAdd"),
      *     @OA\Response(
-     *      response="200",
+     *      response="201",
      *      description="Create a customer",
      *      @OA\JsonContent(example="Customer1 has been registered")
      * )
@@ -52,13 +56,13 @@ class CustomerController extends AbstractController
     {
         $customer = $this->customerHandler->handleCreate($request, $this->getUser());
 
-        return new JsonResponse(['success' => $customer->getUsername().' has been registered'], 200);
+        return new JsonResponse(['success' => $customer->getUsername().' has been registered'], 201);
     }
 
     /**
-     * @Route("/customer/delete/{id}", name="delete_customer", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/customers/delete/{id}", name="delete_customer", methods={"DELETE"}, requirements={"id"="\d+"})
      * @OA\Delete (
-     *     path="/customer/delete/{id}",
+     *     path="/customers/delete/{id}",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *      name="id",
@@ -68,9 +72,8 @@ class CustomerController extends AbstractController
      *     ),
      *     @OA\Schema(ref="#/components/parameters/id"),
      *     @OA\Response(
-     *      response="200",
+     *      response="204",
      *      description="Delete a customer",
-     *     @OA\JsonContent(example="The customer has been deleted")
      * ),
      * @OA\Response(
      *      response="404",
@@ -92,13 +95,13 @@ class CustomerController extends AbstractController
         $this->denyAccessUnlessGranted('owner', $customer);
         $this->customerHandler->handleDelete($customer);
 
-        return new JsonResponse(['success' => 'The customer has been deleted'], 200);
+        return new JsonResponse(null, 204);
     }
 
     /**
-     * @Route("/customer/{id}", name="get_customer", methods={"GET"}, requirements={"id"="\d+"})
+     * @Route("/customers/{id}", name="get_customer", methods={"GET"}, requirements={"id"="\d+"})
      * @OA\Get(
-     *     path="/customer/{id}",
+     *     path="/customers/{id}",
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *      name="id",
@@ -156,19 +159,15 @@ class CustomerController extends AbstractController
      *     @OA\JsonContent(example="The client hasn't been found")
      * ),
      * )
+     *
      * @throws Exception
      */
     public function getAll(Request $request): Response
     {
-        $id = $request->get('id');
-        $page = $request->get('page');
-
-        if (!$id || !$page) {
-            throw new Exception('Missing parameters. id and page parameters are mandatory', 400);
-        }
+        $params = $this->paramsCheckService->checkParamsCustomers($request);
 
         return $this->cacheService->cache(
-            $this->response->setUpResponse($this->customerManager->getAllCustomerByClient($id, $page), 'customer')
+            $this->response->setUpResponse($this->customerManager->getAllCustomerByClient($params['id'], $params['page']), 'customers')
         );
     }
 }

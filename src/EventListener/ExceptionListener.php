@@ -4,7 +4,8 @@ namespace App\EventListener;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ExceptionListener
@@ -15,27 +16,28 @@ class ExceptionListener
 
         $response = new JsonResponse();
         $data = [
-            'error' => [
-                'message' => $exception->getMessage(),
-                'code' => $exception->getCode(),
-            ],
+            'error' => 'error',
+            'error_description' => $exception->getMessage(),
         ];
 
         if ($exception instanceof NotFoundHttpException) {
             $data = [
-                'error' => [
-                    'code' => $exception->getStatusCode(),
-                    'message' => $exception->getMessage(),
-                ],
+                'error' => 'not_found',
+                'error_description' => $exception->getMessage(),
             ];
         }
 
-        if ($exception instanceof HttpExceptionInterface) {
+        if ($exception instanceof BadRequestHttpException) {
             $data = [
-                'error' => [
-                    'code' => $exception->getStatusCode(),
-                    'message' => $exception->getMessage(),
-                ],
+                'error' => 'invalid_request',
+                'error_description' => $exception->getMessage(),
+            ];
+        }
+
+        if ($exception instanceof AccessDeniedHttpException) {
+            $data = [
+                'error' => 'not_allowed',
+                'error_description' => $exception->getMessage(),
             ];
         }
 
