@@ -21,20 +21,20 @@ class CustomerController extends AbstractController
     private CustomerManager $customerManager;
     private CacheService $cacheService;
     private ResponseService $response;
-    private RequestParametersCheckService $parametersCheckService;
+    private RequestParametersCheckService $paramsCheckService;
 
     public function __construct(
         CustomerManager $customerManager,
         CustomerHandler $customerHandler,
         CacheService $cacheService,
         ResponseService $response,
-        RequestParametersCheckService $parametersCheckService
+        RequestParametersCheckService $paramsCheckService
     ) {
         $this->customerHandler = $customerHandler;
         $this->customerManager = $customerManager;
         $this->cacheService = $cacheService;
         $this->response = $response;
-        $this->parametersCheckService = $parametersCheckService;
+        $this->paramsCheckService = $paramsCheckService;
     }
 
     /**
@@ -164,7 +164,7 @@ class CustomerController extends AbstractController
      */
     public function getAll(Request $request): Response
     {
-        $params = $this->parametersCheckService->checkParamsCustomers($request);
+        $params = $this->paramsCheckService->checkParamsCustomers($request);
 
         return $this->cacheService->cache(
             $this->response->setUpResponse($this->customerManager->getAllCustomerByClient($params['id'], $params['page']), 'customers')

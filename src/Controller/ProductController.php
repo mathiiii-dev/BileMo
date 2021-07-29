@@ -17,18 +17,18 @@ class ProductController extends AbstractController
     private ProductManager $productManager;
     private CacheService $cacheService;
     private ResponseService $response;
-    private RequestParametersCheckService $parametersCheckService;
+    private RequestParametersCheckService $paramsCheckService;
 
     public function __construct(
         ProductManager $productManager,
         CacheService $cacheService,
         ResponseService $response,
-        RequestParametersCheckService $parametersCheckService
+        RequestParametersCheckService $paramsCheckService
     ) {
         $this->productManager = $productManager;
         $this->cacheService = $cacheService;
         $this->response = $response;
-        $this->parametersCheckService = $parametersCheckService;
+        $this->paramsCheckService = $paramsCheckService;
     }
 
     /**
@@ -88,7 +88,7 @@ class ProductController extends AbstractController
      */
     public function products(Request $request): Response
     {
-        $page = $this->parametersCheckService->checkParamsProducts($request);
+        $page = $this->paramsCheckService->checkParamsProducts($request);
 
         return $this->cacheService->cache(
             $this->response->setUpResponse($this->productManager->getProducts($page), 'show_list_products')
