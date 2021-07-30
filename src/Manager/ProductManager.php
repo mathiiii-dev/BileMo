@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProductManager
@@ -37,10 +38,15 @@ class ProductManager
         $count = $this->entityManager->createQueryBuilder()->select('count(product.id)')->from('App:Product', 'product');
         $pagination = $this->pagination->getPagination($page, $count->getQuery()->getSingleScalarResult());
         $products = $this->productRepository->findBy([], [], $pagination['limit'], $pagination['offset']);
-        array_push($products, ['_embedded' => ['pages' => $pagination['pages']]]);
 
         if (empty($products)) {
             throw new NotFoundHttpException('No products have been found');
+        }
+
+        array_push($products, ['_embedded' => ['pages' => $pagination['pages']]]);
+
+        if ($pagination['currentPage'] <= 0 || $pagination['currentPage'] > $pagination['pages'] || !filter_var($page, FILTER_VALIDATE_INT)) {
+            throw new BadRequestHttpException('This page doesn\'t exist. (only '.$pagination['pages'].' pages)', null, 400);
         }
 
         return $products;

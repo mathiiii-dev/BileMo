@@ -7,6 +7,7 @@ use App\Repository\CustomerRepository;
 use App\Service\PaginationService;
 use App\Service\ValidatorService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CustomerManager
@@ -48,10 +49,15 @@ class CustomerManager
         $this->userManager->getUserById($id);
         $pagination = $this->pagination->getPagination($page, $count->getQuery()->getSingleScalarResult());
         $customers = $this->customerRepository->findBy(['client' => $id], [], $pagination['limit'], $pagination['offset']);
-        array_push($customers, ['_embedded' => ['pages' => $pagination['pages']]]);
 
         if (empty($customers)) {
             throw new NotFoundHttpException('No customers have been found', null, 404);
+        }
+
+        array_push($customers, ['_embedded' => ['pages' => $pagination['pages']]]);
+
+        if ($pagination['currentPage'] <= 0 || $pagination['currentPage'] > $pagination['pages'] || !filter_var($page, FILTER_VALIDATE_INT)) {
+            throw new BadRequestHttpException('This page doesn\'t exist. (only '.$pagination['pages'].' pages)', null, 400);
         }
 
         return $customers;
