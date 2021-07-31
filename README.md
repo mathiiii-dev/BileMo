@@ -6,7 +6,7 @@ Create a web service exposing an API
 
 These instructions will get you a copy of the project up and running on your local machine if you want to test it or develop something on it.
 
-### Prerequisites
+## Prerequisites
 
 To make the project run you will need to install those things :
 
@@ -15,45 +15,57 @@ To make the project run you will need to install those things :
 * [Apache 2.4.35](http://archive.apache.org/dist/httpd/httpd-2.4.35.tar.gz)
 * [MySQL 5.7.24](https://downloads.mysql.com/archives/get/p/23/file/mysql-5.7.24-winx64.zip)
 * [Composer](https://getcomposer.org/download/)
+* [Symfony](https://symfony.com/download)
 
-### Installing
+## Installing
 
-Follow those steps to make the projetc run on your machine
+Follow those steps to make the project run on your machine
 
 Clone the project :
 ```
-git clone https://github.com/mathias73/BileMo.git
+git clone https://github.com/mathiiii-dev/BileMo.git
 ```
 Install composer dependencies :
 ```
 composer install
 ```
 
-### Database & DataFixtures
+## Database & DataFixtures
 
-First edit .env (or .env.local) with your database credentials : 
+First edit .env (or create a .env.local to override it) with your database credentials : 
 ```
 DATABASE_URL="mysql://root:@127.0.0.1:3306/bilemo?serverVersion=5.7"
 ```
 
 Create the database :
 ```
-php bin/console doctrine:create:database
+php bin/console doctrine:database:create
 ```
 
-Add table :
+Update schema :
 ```
-php bin/console make:migration
-```
-and :
-```
-php bin/console doctrine:migrations:migrate
+php bin/console doctrine:schema:update --force
 ```
 
-You can load some data into the database : 
+Load some data into the database : 
 ```
 php bin/console doctrine:fixtures:load
 ```
+
+## JWT Config
+
+Edit .env (or .env.local) : 
+```
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=
+```
+
+Generate SSL key : 
+```
+php bin/console lexik:jwt:generate-keypair
+```
+
 
 ## Test account
 
