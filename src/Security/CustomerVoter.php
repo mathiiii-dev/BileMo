@@ -46,7 +46,7 @@ class CustomerVoter extends Voter
     private function canDelete(Customer $customer, User $user): bool
     {
         if ($customer->getClient()->getId() !== $user->getId()) {
-            throw new AccessDeniedHttpException("You can't delete this customer");
+            throw new AccessDeniedHttpException("You can't delete this customer", null, 404);
         }
 
         return true;

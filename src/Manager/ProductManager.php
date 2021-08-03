@@ -40,7 +40,7 @@ class ProductManager
         $products = $this->productRepository->findBy([], [], $pagination['limit'], $pagination['offset']);
 
         if (empty($products)) {
-            throw new NotFoundHttpException('No products have been found');
+            throw new NotFoundHttpException('No products have been found', null, 404);
         }
 
         array_push($products, ['_embedded' => ['pages' => $pagination['pages']]]);

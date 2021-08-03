@@ -24,7 +24,7 @@ class RequestParametersCheckService
         $page = $request->get('page');
 
         if (!$id) {
-            throw new BadRequestHttpException('Missing parameter. id parameter is mandatory');
+            throw new BadRequestHttpException('Missing parameter. id parameter is mandatory', null, 400);
         }
 
         if (!$page) {

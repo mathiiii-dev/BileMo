@@ -33,7 +33,7 @@ class UserManager
         $user = $this->userRepository->findOneBy(['id' => $id]);
 
         if (!$user) {
-            throw new NotFoundHttpException("The client haven't been found");
+            throw new NotFoundHttpException("The client haven't been found", null, 404);
         }
 
         return $user;

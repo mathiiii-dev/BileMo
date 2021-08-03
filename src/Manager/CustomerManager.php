@@ -37,7 +37,7 @@ class CustomerManager
         $customer = $this->customerRepository->findOneBy(['id' => $id]);
 
         if (!$customer) {
-            throw new NotFoundHttpException('The customer n° '.$id." hasn't been found");
+            throw new NotFoundHttpException('The customer n° '.$id." hasn't been found", null, 404);
         }
 
         return $customer;
