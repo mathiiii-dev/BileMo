@@ -65,7 +65,11 @@ Generate SSL key :
 ```
 php bin/console lexik:jwt:generate-keypair
 ```
-
+or like this : 
+```
+openssl genrsa -out config/jwt/private.pem 4096
+openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+```
 
 ## Test account
 
@@ -87,9 +91,29 @@ or :
 php bin/console server:start
 ```
 
+## Project Test
+
+If you want to test this project you have two options : 
+
+You can test this via Postman by downloading this collection :
+[Collection postman bilemo](https://github.com/mathiiii-dev/BileMo/files/6926310/MICHELI_Mathias_BileMo.postman_collection.zip)
+
+Or you can test it via an frontend app I've made with Nuxt.JS : 
+https://bilemo-frontend.herokuapp.com/
+
+Frontend app Github Repository : 
+https://github.com/mathiiii-dev/bilemo-frontend
+
+
 ## Built With
 
 * [Symfony](https://symfony.com/) - Framework PHP
+* [LexikJWTAuthenticationBundle](https://github.com/lexik/LexikJWTAuthenticationBundle) - JWT Bundle
+* [JWTRefreshTokenBundle](https://github.com/markitosgv/JWTRefreshTokenBundle) - Refresh JWT Bundle
+* [BazingaHateoasBundle](https://github.com/willdurand/BazingaHateoasBundle) - Richardson Model
+* [NelmioCorsBundle](https://symfony.com/doc/current/testing.html) - CORS Bundle
+* [Swagger-PHP](https://symfony.com/) - API Documentation
+
 
 ## Versioning
 
