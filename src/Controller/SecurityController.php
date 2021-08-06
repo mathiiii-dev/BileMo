@@ -47,7 +47,7 @@ class SecurityController extends AbstractController
     {
         $user = $this->userHandler->handleCreate($request);
 
-        return new JsonResponse(['success' => $user->getUsername().' has been registered'], 200);
+        return new JsonResponse(['success' => $user->getId().' has been registered. With id '.$user->getId()], 200);
     }
 
     /**

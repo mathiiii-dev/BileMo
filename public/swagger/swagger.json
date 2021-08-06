@@ -6,8 +6,12 @@
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000/api",
-            "description": "An API built with symfony"
+            "url": "https://127.0.0.1:8000/api",
+            "description": "dev"
+        },
+        {
+            "url": "https://api-bilemo.herokuapp.com/api",
+            "description": "prod"
         }
     ],
     "paths": {

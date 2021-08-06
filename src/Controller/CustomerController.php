@@ -38,7 +38,7 @@ class CustomerController extends AbstractController
     }
 
     /**
-     * @Route("/customers/add", name="add_customer", methods={"POST"})
+     * @Route("/customers", name="add_customer", methods={"POST"})
      * @OA\Post(
      *     path="/customers/add",
      *     security={{"bearerAuth":{}}},
@@ -56,11 +56,11 @@ class CustomerController extends AbstractController
     {
         $customer = $this->customerHandler->handleCreate($request, $this->getUser());
 
-        return new JsonResponse(['success' => $customer->getUsername().' has been registered'], 201);
+        return new JsonResponse(['success' => $customer->getUsername().' has been registered. With id '.$customer->getId()], 201);
     }
 
     /**
-     * @Route("/customers/delete/{id}", name="delete_customer", methods={"DELETE"}, requirements={"id"="\d+"})
+     * @Route("/customers/{id}", name="delete_customer", methods={"DELETE"}, requirements={"id"="\d+"})
      * @OA\Delete (
      *     path="/customers/delete/{id}",
      *     security={{"bearerAuth":{}}},
