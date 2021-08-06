@@ -96,13 +96,17 @@ php bin/console server:start
 If you want to test this project you have two options : 
 
 You can test this via Postman by downloading this collection :
-[Collection postman bilemo](https://github.com/mathiiii-dev/BileMo/files/6926310/MICHELI_Mathias_BileMo.postman_collection.zip)
+[Collection postman bilemo](https://github.com/mathiiii-dev/BileMo/files/6944254/P7_04_Collection_Postman.zip)
 
 Or you can test it via an frontend app I've made with Nuxt.JS : 
 https://bilemo-frontend.herokuapp.com/
 
 Frontend app Github Repository : 
 https://github.com/mathiiii-dev/bilemo-frontend
+
+## API Documentation
+
+You can find the documention here : https://127.0.0.1:8000/swagger/ or here : https://api-bilemo.herokuapp.com/swagger/index.html#/
 
 
 ## Built With
